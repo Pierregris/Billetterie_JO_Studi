@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Page d'inscription</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scripts/scriptRegister.js" defer></script>
+</head>
+
+<body>
+
+  <div class="formulaire">
+    <div>
+      <h1>Je m'inscris</h1>
+    </div>
+    <form method="post" action="/register">
+      <div class="champ"> <label for="nom">Nom : </label>
+        <input type="text" name="nom" id="nom" required>
+      </div>
+      <div class="champ"> <label for="prenom">Prénom : </label>
+        <input type="text" name="prenom" id="prenom" required>
+      </div>
+      <div class="champ"> <label for="mail">Adresse mail : </label>
+        <input type="email" name="mail" id="mail" required>
+      </div>
+      <div class="champ"><label for="password">Mot de passe : </label>
+        <input type="password" name="password" id="password" required>
+      </div>
+      <input type="submit" value="Je m'inscris">
+    </form>
+  </div>
+</body>
+
+</html>
