@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.service.UtilisateurService;
@@ -27,11 +28,24 @@ public class UtilisateurController {
 	@PostMapping("/register")
 	public String inscrireUtilisateur(@ModelAttribute Utilisateur utilisateur) {
 		this.utilisateurService.createUtilisateur(utilisateur);
-		return "moncompte";
+		return "accueil";
+	}
+
+	@GetMapping("/login")
+	public String showLoginPage(@RequestParam(value = "error", required = false) String error, Model model) {
+		if (error != null) {
+			model.addAttribute("errorMessage", "Identifiant ou mot de passe incorrects");
+		}
+		return "login";
 	}
 
 	@GetMapping("/moncompte")
 	public String showMonCompte() {
 		return "moncompte";
+	}
+
+	@GetMapping("/accueil")
+	public String showAccueil() {
+		return "accueil";
 	}
 }

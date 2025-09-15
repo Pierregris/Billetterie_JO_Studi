@@ -4,10 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Connexion utilisateur</title>
 </head>
 
 <body>
+    <div class="formulaire">
+        <div>
+            <h1>Je me connecte</h1>
+        </div>
+        <form method="post" th:action="@{/login}">
+            <div th:if="${errorMessage}" class="alert" th:text="${errorMessage}"></div>
+            <div class="champ"> <label for="mail">Adresse mail : </label>
+                <input type="email" name="mail" required>
+            </div>
+            <div class="champ"><label for="password">Mot de passe : </label>
+                <input type="password" name="password" required>
+            </div>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="submit" value="Connexion">
+        </form>
+    </div>
 
 </body>
 
