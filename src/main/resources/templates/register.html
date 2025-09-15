@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>Page d'inscription</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" th:href="@{style/style.css}">
   <script src="scripts/scriptRegister.js" defer></script>
 </head>
 
@@ -14,18 +14,18 @@
     <div>
       <h1>Je m'inscris</h1>
     </div>
-    <form method="post" action="/register">
+    <form method="post" th:action="@{/register}" th:object="${utilisateur}">
       <div class="champ"> <label for="nom">Nom : </label>
-        <input type="text" name="nom" id="nom" required>
+        <input type="text" th:field="*{nom}" required>
       </div>
       <div class="champ"> <label for="prenom">Prénom : </label>
-        <input type="text" name="prenom" id="prenom" required>
+        <input type="text" th:field="*{prenom}" required>
       </div>
       <div class="champ"> <label for="mail">Adresse mail : </label>
-        <input type="email" name="mail" id="mail" required>
+        <input type="email" th:field="*{mail}" required>
       </div>
       <div class="champ"><label for="password">Mot de passe : </label>
-        <input type="password" name="password" id="password" required>
+        <input type="password" th:field="*{password}" required>
       </div>
       <input type="submit" value="Je m'inscris">
     </form>

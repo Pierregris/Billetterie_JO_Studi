@@ -19,8 +19,9 @@ public class SpringSecurityConfig {
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
-		http.authorizeRequests(authorizeRequests -> authorizeRequests.requestMatchers("/login", "/register", "/accueil")
-				.permitAll().requestMatchers("/admin").hasAuthority("ADMIN").anyRequest().authenticated())
+		http.authorizeRequests(authorizeRequests -> authorizeRequests
+				.requestMatchers("/style/**", "/scripts/**", "/img/**", "/login", "/register", "/accueil").permitAll()
+				.requestMatchers("/admin").hasAuthority("ADMIN").anyRequest().authenticated())
 				.formLogin(formLogin -> formLogin.permitAll().defaultSuccessUrl("/moncompte"))
 				.logout(logout -> logout.permitAll());
 		return http.build();
