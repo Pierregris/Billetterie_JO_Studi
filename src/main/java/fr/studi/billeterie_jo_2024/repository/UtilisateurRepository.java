@@ -9,6 +9,8 @@ import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
+	// L'identifiant utilisé pour la connexion sera l'adresse mail. Elle est unique
+	// pour chaque utilisateur
 	Optional<Utilisateur> findByMail(String mail);
 
 }

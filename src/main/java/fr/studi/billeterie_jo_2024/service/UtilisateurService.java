@@ -10,5 +10,5 @@ public interface UtilisateurService {
 
 	public void deleteUtilisateur();
 
-	public Utilisateur getUtilisateurbyId(Long id);
+	public Utilisateur getUtilisateurbyMail(String mail);
 }

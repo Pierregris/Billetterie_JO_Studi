@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
 import fr.studi.billeterie_jo_2024.service.UtilisateurService;
+import fr.studi.billeterie_jo_2024.status.Role;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
@@ -19,8 +20,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	@Override
 	public void createUtilisateur(Utilisateur utilisateur) {
+		// Encodage du mot de passe avant la mise en base de données
 		String password_encode = passwordEncoder.encode(utilisateur.getPassword());
 		utilisateur.setPassword(password_encode);
+		utilisateur.setRole(Role.USER);
 		this.utilisateurRepository.save(utilisateur);
 	}
 
@@ -37,9 +40,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	}
 
 	@Override
-	public Utilisateur getUtilisateurbyId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Utilisateur getUtilisateurbyMail(String mail) {
+		return utilisateurRepository.findByMail(mail).orElse(null);
 	}
 
 }

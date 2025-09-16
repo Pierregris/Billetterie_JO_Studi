@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{style/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"
+        defer></script>
+    <link rel="stylesheet" th:href="@{/style/style.css}">
+    <title>Document</title>
+</head>
+
+<body>
+    <div th:replace="header::header "></div>
+    <h1>Bienvenue sur votre page administrateur</h1>
+    <section class="row m-1 col-12 justify-content-center">
+
+        <div class="card col-12 col-md-4 m-1">
+            <div class="card-body text-center">
+
+                <h3 class="card-title">Créer un nouvel événement</h3>
+                <p class="card-text">Ajouter un nouvel événement à ouvrir à la vente. Renseignez le type d'épreuve, la
+                    date et le lieu, ainsi que la capacité d'accueil maximale
+                </p>
+                <img th:src="@{/img/img_athletisme.jpg}" alt="" class="img-fluid m-0">
+                <a class="btn btn-primary m-1" th:href="@{/admin/creerEvenement}">JE CREE UN EVENEMENT </a>
+            </div>
+        </div>
+
+        <div class="card col-12 col-md-4 m-1">
+            <div class="card-body text-center">
+
+                <h3 class="card-title">Consulter les données des événements en vente</h3>
+                <p class="card-text">Consultez les ventes en cours pour vos événements
+                </p>
+                <img th:src="@{/img/img_athletisme.jpg}" alt="" class="img-fluid m-0">
+                <a class="btn btn-primary m-1" th:href="@{/admin/consulterEvenement}">JE CONSULTE LES DONNEES </a>
+            </div>
+        </div>
+
+    </section>
+</body>
+
+</html>
