@@ -1,0 +1,108 @@
+!
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:fragment="scriptImport(pageTitle)">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"
+        defer></script>
+
+    <script th:src="@{/scripts/scriptDeconnexion.js}" defer></script>
+    <script th:src="@{/scripts/scriptBilletterie.js}" defer></script>
+
+
+    <link rel="stylesheet" th:href="@{/style/style.css}">
+
+    <title th:text="${pageTitle}"></title>
+</head>
+
+<body>
+    <div th:replace="fragments/header::header "></div>
+    <main>
+        <div class="alert alert-success info fixed-top" style="top:85px" id="messageSuccesPanier"></div>
+        <section class="row m-1 col-12 justify-content-center">
+
+            <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 mx-3">
+                <div class="card-body text-center">
+
+                    <h3 class="card-title" th:text="${evenement.nomEvenement}"></h3>
+                    <p class="card-text"
+                        th:text="|le ${#temporals.format(evenement.dateEvenement, 'dd/MM/yyyy')}, à ${evenement.heureEvenement} à ${evenement.lieu}">
+                    </p>
+                    <div th:with="imageName=${evenement.sport.toLowerCase()}">
+                        <img th:src="@{'/img/img_' + ${imageName} + '.jpg'}" alt="" class="img-fluid m-0">
+                    </div>
+
+                    <p class="card-text" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}"
+                        th:text="|Prix d'un billet : ${#numbers.formatCurrency(evenement.prixBillet)}|"></p>
+                    <a class="btn btn-primary m-2" th:data-bs-target="|#modalCommande_${evenement.id}|"
+                        data-bs-toggle="modal" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}">Je
+                        prends mes places !</a>
+                    <a href="" class="btn btn-primary m-2"
+                        th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">Je souhaite m'inscrire sur liste
+                        d'attente</a>
+                    <p class="card-text alert alert-warning m-1 p-1"
+                        th:if="${evenement.capaciteMax - evenement.billetsVendus < 100 and evenement.capaciteMax - evenement.billetsVendus > 0}"
+                        th:text="|Plus que ${evenement.capaciteMax - evenement.billetsVendus} places disponibles !|">
+                    </p>
+                    <p class="card-text alert alert-danger m-1 p-1"
+                        th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">
+                        Complet</p>
+
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <div th:each="evenement:${evenements}" class="modal" th:id="|modalCommande_${evenement.id}|"
+        th:attr="data-evenement-id=${evenement.id}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Commander des places</h3>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-start">
+                    <form id="form-choix-offre" action="">
+                        <div>Choisissez l'offre qui vous correspond :</div>
+                        <div> <input class="choix-offre" type="radio" name="offreChoisie" th:id="|solo_${evenement.id}|"
+                                value="solo" th:attr="data-montant=${evenement.prixBillet}">
+                            <label for="solo">Solo : vous n'achetez qu'un seul ticket : <span
+                                    th:text="|${#numbers.formatCurrency(evenement.prixBillet)}|"></span></label>
+                        </div>
+                        <div th:if="${evenement.capaciteMax - evenement.billetsVendus>1}"><input class="choix-offre"
+                                type="radio" name="offreChoisie" th:id="|duo_${evenement.id}|" value="duo"
+                                th:attr="data-montant=${2*0.95*evenement.prixBillet}">
+                            <label for="duo">Duo : vous achetez deux tickets (-5%) : <span
+                                    th:text="|${#numbers.formatCurrency(2*0.95*evenement.prixBillet)}|"></span></label>
+                        </div>
+                        <div th:if="${evenement.capaciteMax - evenement.billetsVendus>3}"> <input class="choix-offre"
+                                type="radio" name="offreChoisie" th:id="|familiale_${evenement.id}|" value="familiale"
+                                th:attr="data-montant=${4*0.9*evenement.prixBillet}">
+                            <label for="familiale">Familiale : vous achetez quatre tickets (-10%) :
+                                <span th:text="|${#numbers.formatCurrency(4*0.9*evenement.prixBillet)}|"></span></label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">Montant de la commande : <span id="montant"></span></div>
+                <button class="btn btn-primary m-1 btn-ajout-panier" th:id="|btn-ajout-panier_${evenement.id}|"
+                    type="button">Ajouter au
+                    panier</button>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

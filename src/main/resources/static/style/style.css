@@ -6,7 +6,12 @@
 body{
     background-image: url("../img/background.webp");
     background-size:cover;
-    font-family: Belgrad;
+    background-attachment: fixed;
+    font-family: Olympic Sans;
+}
+
+main{
+    padding-top: 75px;
 }
 
 
@@ -15,26 +20,36 @@ body{
     padding: 20px;
     margin:auto;
     margin-top : 50px;
-    background-color: lightblue;
+    background-color: rgba(255,255,255,0.9);
     border-radius : 20px;
-    text-align: center;
-    opacity: 80%;
+    opacity: 0.9;
 }
 
-.champ{
-    padding:10px;
-    margin: 5px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
+.nomCompte{
+    padding-bottom: 0px;
+}
+
+.deconnexion{
+    padding: 0px;
+    font-size: 0.9rem;
+    margin-top:0px;
+}
+
+.deconnexion:hover{
+    cursor: pointer;
+}
+
+.form-control{
+    margin:5px;
 }
 
 input{
     flex-grow : 0.95;
     margin-right : 10px;
     border-radius: 5px;
-    opacity: 100%;
+    opacity: 1;
 }
+
 
 .navbar-brand img{
     max-height: 70px ;
@@ -43,24 +58,32 @@ input{
 }
 
 .navbar{
-    opacity: 80%;
+    opacity: 0.8;
     max-height: 75px;
 }
+
+
 
 h1{
     color: white;
     text-align: center;
     font-size: 3rem;
-    font-family: Olympic Sans;
     font-weight: bold;
 }
 
 .card{
     margin:10px;
-    font-family: Olympic Sans;
-    
     background-color: rgba(255,255,255,0.9);
+    transition: 0.4s;
 }
+
+.card:hover{
+    transform: scale(1.02);
+    transition : 0.4s;
+    
+}
+
+
 
 .card img{
 height: 300px;
@@ -72,6 +95,36 @@ object-fit: cover;
 }
 
 .btn{
-    opacity: 100%;
+    opacity: 1;
 }
 
+.panier-recap{
+    height: 80vh;
+    top:85px;
+}
+
+.panier-recap:hover{
+    transform: scale(1);
+}
+
+.info{
+   opacity: 0;
+}
+
+.affInfo{
+    opacity: 0.8;
+    transition-duration: 1s;
+}
+
+.hideInfo{
+    opacity: 0;
+    transition-duration: 1s;
+}
+
+.hidden-transition{
+opacity: 0;
+transition:3s;}
+
+.hidden{
+    display: none;
+}

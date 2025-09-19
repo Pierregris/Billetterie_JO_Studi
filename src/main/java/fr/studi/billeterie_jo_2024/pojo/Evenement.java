@@ -16,7 +16,17 @@ public class Evenement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String epreuve;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	private String sport;
+
+	private String nomEvenement;
 
 	private int capaciteMax;
 
@@ -27,6 +37,8 @@ public class Evenement {
 	private LocalTime heureEvenement;
 
 	private String lieu;
+
+	private float prixBillet;
 
 	public String getLieu() {
 		return lieu;
@@ -42,12 +54,20 @@ public class Evenement {
 	public Evenement() {
 	}
 
-	public String getEpreuve() {
-		return epreuve;
+	public String getSport() {
+		return sport;
 	}
 
-	public void setEpreuve(String epreuve) {
-		this.epreuve = epreuve;
+	public void setSport(String sport) {
+		this.sport = sport;
+	}
+
+	public String getNomEvenement() {
+		return nomEvenement;
+	}
+
+	public void setNomEvenement(String nomEvenement) {
+		this.nomEvenement = nomEvenement;
 	}
 
 	public int getCapaciteMax() {
@@ -80,6 +100,14 @@ public class Evenement {
 
 	public void setHeureEvenement(LocalTime heureEvenement) {
 		this.heureEvenement = heureEvenement;
+	}
+
+	public float getPrixBillet() {
+		return prixBillet;
+	}
+
+	public void setPrixBillet(float prixBillet) {
+		this.prixBillet = prixBillet;
 	}
 
 }

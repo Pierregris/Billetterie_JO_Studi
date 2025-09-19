@@ -8,12 +8,12 @@ public interface EvenementService {
 
 	void createEvenement(Evenement evenement);
 
-	// void updateEvenement(String epreuve, Evenement evenement);
-
-	Evenement getEvenementbyEpreuve(String epreuve);
-
 	List<Evenement> getAllEvenements();
 
+	List<Evenement> getEvenementsBySport(String sport);
+
 	void updateBilletsVendus(int quantite, Evenement evenement);
+
+	List<String> getDistinctSports();
 
 }

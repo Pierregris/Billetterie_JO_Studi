@@ -1,0 +1,31 @@
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/accueil">
+                <img src="/img/logo.png" alt="logo"></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse ms-auto me-auto" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item mx-3"><a href="/accueil" class="nav-link" aria-current="page">Accueil</a>
+                    </li>
+                    <li class="nav-item mx-3"><a href="/billetterie" class="nav-link">Billetterie</a></li>
+                    <li class="nav-item mx-3"><a href="/billetterie/panier" class="nav-link">Panier</a></li>
+                    <li class="nav-item mx-3 text-center" sec:authorize="isAuthenticated()"><a href="/moncompte"
+                            class="nav-link nomCompte"><span sec:authentication="principal.prenom"
+                                sec:authorize="isAuthenticated()"></span>
+                            <span sec:authentication="principal.nom" sec:authorize="isAuthenticated()"></span></a><a
+                            sec:authotize="isAuthenticated()" class="deconnexion">Déconnexion</a></li>
+                    <li class="nav-item mx-3" sec:authorize="hasAuthority('ADMIN')"><a href=" /admin/accueilAdmin"
+                            class="nav-link">
+                            Administrateur</a></li>
+                    <li class="nav-item mx-3" sec:authorize="!isAuthenticated()"><a th:href="@{/login}"
+                            class="nav-link">Connexion</a></li>
+
+                </ul>
+            </div>
+    </nav>
+</header>

@@ -27,14 +27,17 @@ public class EvenementServiceImpl implements EvenementService {
 	}
 
 	@Override
-	public Evenement getEvenementbyEpreuve(String epreuve) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Evenement> getAllEvenements() {
 		return evenementRepository.findAll();
 	}
+
+	@Override
+	public List<Evenement> getEvenementsBySport(String sport) {
+		return evenementRepository.findBySport(sport);
+	}
+
+	public List<String> getDistinctSports() {
+		return evenementRepository.findAllSports();
+	};
 
 }

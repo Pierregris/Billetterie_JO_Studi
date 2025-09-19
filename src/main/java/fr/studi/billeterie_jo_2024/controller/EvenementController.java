@@ -28,6 +28,7 @@ public class EvenementController {
 
 	@PostMapping("/creerEvenement")
 	public String ajouterEvenement(@ModelAttribute Evenement evenement) {
+		evenement.setSport(evenement.getSport().replace(" ", "-"));
 		evenementService.createEvenement(evenement);
 		return "redirect:/admin/creerEvenement";
 	}

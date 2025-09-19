@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 
 <head th:fragment="scriptImport(pageTitle)">
 
@@ -17,31 +17,27 @@
 
     <script th:src="@{/scripts/scriptDeconnexion.js}" defer></script>
 
-
-
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
-    <title>Compte utilisateur</title>
+    <title th:text="${pageTitle}"></title>
 </head>
 
 <body>
+    <div th:replace="fragments/header::header"></div>
     <main>
-        <div th:replace="fragments/header::header "></div>
-        <h1>Bienvenue sur votre compte</h1>
+        <section class="row m-1 col-12 justify-content-center">
 
-        <div th:each="reservation : ${reservations}" class="reservation card col-3 mx-3">
-
-            <div class="card-body text-center p-0">
-                <h3 class="card-header" th:text="${reservation.evenement.sport}"></h3>
-                <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
-                <p class="card-text"
-                    th:text="|Le ${reservation.evenement.dateEvenement} à ${reservation.evenement.heureEvenement}|"></p>
-
-
-
+            <div th:each="sport : ${sports}" class="card col-12 col-md-3 mx-3 p-0 border-0">
+                <img th:with="imageName=${sport.replace(' ','-').toLowerCase()}"
+                    th:src="@{'/img/img_' + ${imageName} + '.jpg'}" alt="" class="img-fluid card-img-top">
+                <div class="card-body text-center">
+                    <h3 class="card-title" th:text="${sport.replace('-',' ')}"></h3>
+                    <a th:href="@{|/billetterie/pagesport?sport=${sport.replace(' ','-').toLowerCase}|}"
+                        class="stretched-link"></a>
+                </div>
             </div>
-        </div>
 
+        </section>
     </main>
 </body>
 

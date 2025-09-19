@@ -1,6 +1,3 @@
-<!doctype html>
-<html lang="fr">
-
 <head th:fragment="scriptImport(pageTitle)">
 
     <meta charset="UTF-8">
@@ -16,33 +13,12 @@
         defer></script>
 
     <script th:src="@{/scripts/scriptDeconnexion.js}" defer></script>
-
-
+    <script th:src="@{/scripts/scriptSuppressionPanier.js}" defer></script>
+    <script th:src="@{/scripts/scriptBilletterie.js}" defer></script>
+    <script th:src="@{/scripts/scriptPaiement.js}" defer></script>
+    <script th:src="@{/scripts/scriptAffichagePanier.js}" defer></script>
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
-    <title>Compte utilisateur</title>
+    <title th:text="${pageTitle}"></title>
 </head>
-
-<body>
-    <main>
-        <div th:replace="fragments/header::header "></div>
-        <h1>Bienvenue sur votre compte</h1>
-
-        <div th:each="reservation : ${reservations}" class="reservation card col-3 mx-3">
-
-            <div class="card-body text-center p-0">
-                <h3 class="card-header" th:text="${reservation.evenement.sport}"></h3>
-                <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
-                <p class="card-text"
-                    th:text="|Le ${reservation.evenement.dateEvenement} à ${reservation.evenement.heureEvenement}|"></p>
-
-
-
-            </div>
-        </div>
-
-    </main>
-</body>
-
-</html>

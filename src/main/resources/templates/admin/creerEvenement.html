@@ -1,46 +1,43 @@
 <!doctype html>
 <html lang="fr">
 
-<head>
-    <meta charset="utf-8">
-    <title>[Administrateur] Créer un nouvel événement</title>
-    <link rel="stylesheet" th:href="@{style/style.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"
-        defer></script>
-    <link rel="stylesheet" th:href="@{/style/style.css}">
-</head>
+<head th:replace="fragments/head :: scriptImport (pageTitle='[Administrateur] - Créer un nouvel événement')"></head>
 
 <body>
-    <div th:replace="header::header "></div>
+    <div th:replace="fragments/header::header "></div>
+    <main>
+        <div class="formulaire">
+            <div>
+                <h1>CREER UN NOUVEL EVENEMENT</h1>
+            </div>
+            <form method="post" th:action="@{/admin/creerEvenement}" th:object="${evenement}">
+                <!--<div th:if="${errorMessageDoublon}" class="alert" th:utext="${errorMessageDoublon}"></div>-->
+                <div class="champ"> <label for="sport">SPORT : </label>
+                    <input type="text" th:field="*{sport}" required>
+                </div>
+                <div class="champ"> <label for="nomEvenement">NOM DE L'EVENEMENT : </label>
+                    <input type="text" th:field="*{nomEvenement}" required>
+                </div>
+                <div class="champ"> <label for="dateEvenement">DATE : </label>
+                    <input type="date" th:field="*{dateEvenement}" required>
+                </div>
+                <div class="champ"> <label for="heureEvenement">HEURE : </label>
+                    <input type="time" th:field="*{heureEvenement}" required>
+                </div>
+                <div class="champ"><label for="capaciteMax">CAPACITE MAXIMALE : </label>
+                    <input type="number" th:field="*{capaciteMax}" required>
+                </div>
+                <div class="champ"><label for="lieu">LIEU : </label>
+                    <input type="text" th:field="*{lieu}" required>
+                </div>
+                <div class="champ"><label for="prixBillet">PRIX DU BILLET A L'UNITE : </label>
+                    <input type="text" th:field="*{prixBillet}" required>€
+                </div>
 
-    <div class="formulaire">
-        <div>
-            <h1>CREER UN NOUVEL EVENEMENT</h1>
+                <input type="submit" value="CREER EVENEMENT" style="font-family: Belgrad;">
+            </form>
         </div>
-        <form method="post" th:action="@{/admin/creerEvenement}" th:object="${evenement}">
-            <!--<div th:if="${errorMessageDoublon}" class="alert" th:utext="${errorMessageDoublon}"></div>-->
-            <div class="champ"> <label for="epreuve">EPREUVE : </label>
-                <input type="text" th:field="*{epreuve}" required>
-            </div>
-            <div class="champ"> <label for="dateEvenement">DATE : </label>
-                <input type="date" th:field="*{dateEvenement}" required>
-            </div>
-            <div class="champ"> <label for="heureEvenement">HEURE : </label>
-                <input type="time" th:field="*{heureEvenement}" required>
-            </div>
-            <div class="champ"><label for="capaciteMax">CAPACITE MAXIMALE : </label>
-                <input type="number" th:field="*{capaciteMax}" required>
-            </div>
-            <div class="champ"><label for="lieu">LIEU : </label>
-                <input type="text" th:field="*{lieu}" required>
-            </div>
-
-            <input type="submit" value="CREER EVENEMENT" style="font-family: Belgrad;">
-        </form>
-    </div>
+    </main>
 </body>
 
 </html>
