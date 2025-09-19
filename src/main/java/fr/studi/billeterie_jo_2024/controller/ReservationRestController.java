@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.dto.InfosPaiementDTO;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
-import fr.studi.billeterie_jo_2024.repository.ReservationRepository;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import jakarta.validation.Valid;
 
@@ -21,13 +20,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/apiReservation")
 public class ReservationRestController {
 
-	private final ReservationRepository reservationRepository;
 	@Autowired
 	ReservationService reservationService;
-
-	ReservationRestController(ReservationRepository reservationRepository) {
-		this.reservationRepository = reservationRepository;
-	}
 
 	@PostMapping("/ajouteraupanier")
 	public void ajouterAuPanier(@RequestBody AAjouterAuPanierDTO aAjouterAuPanier) {
@@ -49,7 +43,6 @@ public class ReservationRestController {
 	@PostMapping("/validerPanier")
 	public void validerPanier(@RequestBody List<Long> reservationListId) {
 		reservationListId.forEach(reservation_id -> {
-			System.out.println(reservation_id);
 			reservationService.validerReservation(reservation_id);
 
 		});

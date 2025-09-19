@@ -18,6 +18,7 @@ import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.service.EmailService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import fr.studi.billeterie_jo_2024.service.UtilisateurService;
+import jakarta.validation.Valid;
 
 @RequestMapping("/")
 @Controller
@@ -43,7 +44,8 @@ public class UtilisateurController {
 	// On récupère les infos du formulaire et on crée l'utilisateur dans la base de
 	// données à la validation du formulaire
 	@PostMapping("/register")
-	public String inscrireUtilisateur(@ModelAttribute Utilisateur utilisateur, RedirectAttributes redirectAttributes) {
+	public String inscrireUtilisateur(@Valid @ModelAttribute Utilisateur utilisateur,
+			RedirectAttributes redirectAttributes) {
 		if (this.utilisateurService.getUtilisateurbyMail(utilisateur.getMail()) != null) { // On vérifie ici que le mail
 																							// renseigné par
 																							// l'utilisateur n'est pas
