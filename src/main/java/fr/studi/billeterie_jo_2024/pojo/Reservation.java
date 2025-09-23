@@ -2,7 +2,6 @@ package fr.studi.billeterie_jo_2024.pojo;
 
 import java.time.LocalDate;
 
-import fr.studi.billeterie_jo_2024.status.Offre;
 import fr.studi.billeterie_jo_2024.status.StatusReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +19,8 @@ public class Reservation {
 
 	private LocalDate date;
 
+	@ManyToOne
+	@JoinColumn(name = "nom_offre")
 	private Offre offreChoisie;
 
 	private StatusReservation statusReservation;

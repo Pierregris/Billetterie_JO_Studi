@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.pojo.Evenement;
+import fr.studi.billeterie_jo_2024.pojo.Offre;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.repository.EvenementRepository;
+import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.repository.ReservationRepository;
 import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
@@ -29,6 +31,9 @@ public class ReservationServiceImpl implements ReservationService {
 	@Autowired
 	UtilisateurRepository utilisateurRepository;
 
+	@Autowired
+	OffreRepository offreRepository;
+
 	@Override
 	public void createReservation(Reservation reservation) {
 		reservationRepository.save(reservation);
@@ -36,17 +41,21 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public Reservation ajouterAuPanier(AAjouterAuPanierDTO panierDTO) {
+		System.out.println(panierDTO.getMontant());
+		System.out.println(panierDTO.getNomOffre());
 		Reservation panier = new Reservation();
 		panier.setStatusReservation(StatusReservation.PANIER);
 		panier.setDate(LocalDate.now());
 		panier.setMontant(panierDTO.getMontant());
-		panier.setOffreChoisie(panierDTO.getOffreChoisie());
+
+		Offre offre = offreRepository.findById(panierDTO.getNomOffre()).orElse(null);
+		panier.setOffreChoisie(offre);
 		Evenement evenement = evenementRepository.findById(panierDTO.getEvenement_id()).orElse(null);
 		panier.setEvenement(evenement);
 		String mail = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utilisateur utilisateur = utilisateurRepository.findByMail(mail).orElse(null);
 		panier.setUtilisateur(utilisateur);
-		evenement.setBilletsVendus(evenement.getBilletsVendus() + panierDTO.getOffreChoisie().nbPlaces());
+		evenement.setBilletsVendus(evenement.getBilletsVendus() + offre.getNbPlaces());
 		evenementRepository.save(evenement);
 		return panier;
 	}
@@ -72,7 +81,8 @@ public class ReservationServiceImpl implements ReservationService {
 	public void supprimerDuPanier(Long reservation_id) {
 		Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
 		Evenement evenement = reservation.getEvenement();
-		evenement.setBilletsVendus(evenement.getBilletsVendus() - reservation.getOffreChoisie().nbPlaces());
+		Offre offre = reservation.getOffreChoisie();
+		evenement.setBilletsVendus(evenement.getBilletsVendus() - reservation.getOffreChoisie().getNbPlaces());
 		reservationRepository.deleteById(reservation_id);
 
 	}

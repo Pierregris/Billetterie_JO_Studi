@@ -7,34 +7,37 @@
     <div th:replace="fragments/header::header "></div>
     <main>
         <div class="formulaire">
-            <div>
-                <h1>CREER UN NOUVEL EVENEMENT</h1>
+            <div class="text-center">
+                <h3>Créer un nouvel événement</h3>
             </div>
             <form method="post" th:action="@{/admin/creerEvenement}" th:object="${evenement}">
-                <!--<div th:if="${errorMessageDoublon}" class="alert" th:utext="${errorMessageDoublon}"></div>-->
-                <div class="champ"> <label for="sport">SPORT : </label>
-                    <input type="text" th:field="*{sport}" required>
+                <div class="form-group">
+                    <input class="form-control" type="text" th:field="*{sport}" placeholder="Sport" required>
                 </div>
-                <div class="champ"> <label for="nomEvenement">NOM DE L'EVENEMENT : </label>
-                    <input type="text" th:field="*{nomEvenement}" required>
+                <div class="form-group">
+                    <input class="form-control" type="text" th:field="*{nomEvenement}" placeholder="Nom de l'événement"
+                        required>
                 </div>
-                <div class="champ"> <label for="dateEvenement">DATE : </label>
-                    <input type="date" th:field="*{dateEvenement}" required>
+                <div class="form-group">
+                    <input class="form-control" type="date" th:field="*{dateEvenement}" required>
                 </div>
-                <div class="champ"> <label for="heureEvenement">HEURE : </label>
-                    <input type="time" th:field="*{heureEvenement}" required>
+                <div class="form-group">
+                    <input class="form-control" id="heure" type="time" th:field="*{heureEvenement}" required>
                 </div>
-                <div class="champ"><label for="capaciteMax">CAPACITE MAXIMALE : </label>
-                    <input type="number" th:field="*{capaciteMax}" required>
+                <div class="form-group">
+                    <input class="form-control" type="text" th:field="*{capaciteMax}"
+                        placeholder="Capacité maximale de l'événement" required>
                 </div>
-                <div class="champ"><label for="lieu">LIEU : </label>
-                    <input type="text" th:field="*{lieu}" required>
+                <div class="form-group">
+                    <input class="form-control" type="text" th:field="*{lieu}" placeholder="Lieu" required>
                 </div>
-                <div class="champ"><label for="prixBillet">PRIX DU BILLET A L'UNITE : </label>
-                    <input type="text" th:field="*{prixBillet}" required>€
+                <div class="form-group">
+                    <input class="form-control" type="text" th:field="*{prixBillet}"
+                        placeholder="Prix du billet à l'unité (€)" required>
                 </div>
-
-                <input type="submit" value="CREER EVENEMENT" style="font-family: Belgrad;">
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" value="Créer l'événement">
+                </div>
             </form>
         </div>
     </main>

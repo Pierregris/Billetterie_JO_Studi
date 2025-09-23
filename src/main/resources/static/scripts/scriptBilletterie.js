@@ -11,6 +11,7 @@ document.querySelectorAll(".choix-offre").forEach(function (radio) {
         montant = event.target.getAttribute("data-montant");
         // On récupère l'offre choisie
         offreChoisie = event.target.value;
+        console.log(offreChoisie);
         // On trouve la modale parente la plus proche
         const modal = event.target.closest(".modal");
         if (modal) {
@@ -41,7 +42,7 @@ document.querySelectorAll(".btn-ajout-panier").forEach(function (btn){
         alert("Vous n'avez pas choisi d'offre");
         return;
     }
-const dataToSend = {offreChoisie : offreChoisie.toUpperCase(),
+const dataToSend = {nomOffre : offreChoisie.toUpperCase(),
             montant : montant,
             evenement_id : Number(evenement_id) };
             console.log(dataToSend);
@@ -50,7 +51,7 @@ const dataToSend = {offreChoisie : offreChoisie.toUpperCase(),
         method: "POST",
         headers: {"Content-Type" : "application/json", [csrf_header] : csrf_token},
         body: JSON.stringify({
-            offreChoisie : offreChoisie.toUpperCase(),
+            nomOffre : offreChoisie.toUpperCase(),
             montant : montant,
             evenement_id : Number(evenement_id)             
         })
@@ -62,7 +63,7 @@ const dataToSend = {offreChoisie : offreChoisie.toUpperCase(),
             divMessage = document.getElementById("messageSuccesPanier")
             divMessage.textContent = "Vos billets ont bien été ajoutés au panier";
             divMessage.classList.add("affInfo");
-            setTimeout(()=>{divMessage.classList.add("hideInfo"); location.reload()},5000);
+            setTimeout(()=>{divMessage.classList.add("hideInfo"); location.reload()},4000);
             
         }
         else {

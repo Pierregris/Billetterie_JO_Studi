@@ -27,7 +27,7 @@
     <main>
         <section class="row m-1 col-12 justify-content-center">
 
-            <div th:each="sport : ${sports}" class="card col-12 col-md-3 mx-3 p-0 border-0">
+            <div th:each="sport : ${sports}" class="card col-12 col-md-2 mx-3 p-0 border-0">
                 <img th:with="imageName=${sport.replace(' ','-').toLowerCase()}"
                     th:src="@{'/img/img_' + ${imageName} + '.jpg'}" alt="" class="img-fluid card-img-top">
                 <div class="card-body text-center">

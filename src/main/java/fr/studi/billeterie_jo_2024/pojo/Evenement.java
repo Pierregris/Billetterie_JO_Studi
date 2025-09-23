@@ -28,9 +28,9 @@ public class Evenement {
 
 	private String nomEvenement;
 
-	private int capaciteMax;
+	private Integer capaciteMax;
 
-	private int billetsVendus = 0;
+	private Integer billetsVendus = 0;
 
 	private LocalDate dateEvenement;
 
@@ -38,7 +38,7 @@ public class Evenement {
 
 	private String lieu;
 
-	private float prixBillet;
+	private Float prixBillet;
 
 	public String getLieu() {
 		return lieu;
@@ -70,7 +70,7 @@ public class Evenement {
 		this.nomEvenement = nomEvenement;
 	}
 
-	public int getCapaciteMax() {
+	public Integer getCapaciteMax() {
 		return capaciteMax;
 	}
 
@@ -78,7 +78,7 @@ public class Evenement {
 		this.capaciteMax = capaciteMax;
 	}
 
-	public int getBilletsVendus() {
+	public Integer getBilletsVendus() {
 		return billetsVendus;
 	}
 
@@ -102,7 +102,7 @@ public class Evenement {
 		this.heureEvenement = heureEvenement;
 	}
 
-	public float getPrixBillet() {
+	public Float getPrixBillet() {
 		return prixBillet;
 	}
 

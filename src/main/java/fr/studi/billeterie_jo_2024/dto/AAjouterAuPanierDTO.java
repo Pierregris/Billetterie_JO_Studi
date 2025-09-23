@@ -1,18 +1,16 @@
 package fr.studi.billeterie_jo_2024.dto;
 
-import fr.studi.billeterie_jo_2024.status.Offre;
-
 public class AAjouterAuPanierDTO {
-	private Offre offreChoisie;
+	private String nomOffre;
 	private Float montant;
 	private Long evenement_id;
 
-	public Offre getOffreChoisie() {
-		return offreChoisie;
+	public String getNomOffre() {
+		return nomOffre;
 	}
 
-	public void setOffreChoisie(Offre offreChoisie) {
-		this.offreChoisie = offreChoisie;
+	public void setNomOffre(String nomOffre) {
+		this.nomOffre = nomOffre;
 	}
 
 	public Float getMontant() {
