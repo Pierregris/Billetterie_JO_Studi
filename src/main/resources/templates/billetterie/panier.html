@@ -28,15 +28,23 @@
     <div th:replace="fragments/header::header "></div>
     <main>
         <section class="row m-1">
+            <div class="alert alert-warning" th:if="${suppression}">Certaines réservations ont été supprimées de
+                votre panier car elles étaient arrivées à expiration (validité d'une heure à compter de l'ajout au
+                panier)
+            </div>
 
             <div class="container-fluid col-7  ">
+                <div class="container alert alert-light m-2" th:if="${#lists.isEmpty(panier)}">Votre panier est vide
+                </div>
                 <div th:each="reservation : ${panier}" class="element-panier card col-12 mx-3" th:id="${reservation.id}"
-                    th:attr="data-reservation=${reservation.id}, data-montant=${reservation.montant}">
+                    th:attr="data-reservation=${reservation.id}, data-montant=${reservation.montant}, data-validite=${reservation.validite}">
 
                     <div class="card-body text-center">
 
                         <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
                         <p class="card-text" th:text="|Montant : ${reservation.montant}€|"></p>
+                        <p class="card-text"
+                            th:text="|Valable jusqu'à : ${#temporals.format(reservation.validite, 'HH:mm')}|"></p>
 
 
                         <a class="btn btn-primary btn-suppression-panier"

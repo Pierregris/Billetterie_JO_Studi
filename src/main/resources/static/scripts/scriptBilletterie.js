@@ -61,7 +61,7 @@ const dataToSend = {nomOffre : offreChoisie.toUpperCase(),
             const modalBootstrap = bootstrap.Modal.getInstance(modal);
             modalBootstrap.hide();
             divMessage = document.getElementById("messageSuccesPanier")
-            divMessage.textContent = "Vos billets ont bien été ajoutés au panier";
+            divMessage.innerHTML = "Vos billets ont bien été ajoutés au panier <span class='alert-link'><a href='/billetterie/panier'>Voir mon panier</a></span>";
             divMessage.classList.add("affInfo");
             setTimeout(()=>{divMessage.classList.add("hideInfo"); location.reload()},4000);
             

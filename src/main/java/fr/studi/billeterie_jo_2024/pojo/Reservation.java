@@ -1,6 +1,6 @@
 package fr.studi.billeterie_jo_2024.pojo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import fr.studi.billeterie_jo_2024.status.StatusReservation;
 import jakarta.persistence.Entity;
@@ -17,7 +17,17 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private LocalDate date;
+	private LocalDateTime date;
+
+	private LocalDateTime validite;
+
+	public LocalDateTime getValidite() {
+		return validite;
+	}
+
+	public void setValidite(LocalDateTime validite) {
+		this.validite = validite;
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "nom_offre")
@@ -51,11 +61,11 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

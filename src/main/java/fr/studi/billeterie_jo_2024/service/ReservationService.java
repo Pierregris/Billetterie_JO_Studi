@@ -5,6 +5,7 @@ import java.util.List;
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.status.ResultatGetPanier;
 
 public interface ReservationService {
 
@@ -12,7 +13,7 @@ public interface ReservationService {
 
 	Reservation ajouterAuPanier(AAjouterAuPanierDTO panierDTO);
 
-	List<Reservation> getPanier(Utilisateur utilisateur);
+	ResultatGetPanier getPanier(Utilisateur utilisateur);
 
 	void validerPanier(List<Reservation> panier);
 

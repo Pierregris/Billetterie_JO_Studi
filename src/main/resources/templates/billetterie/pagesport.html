@@ -28,7 +28,8 @@
 <body>
     <div th:replace="fragments/header::header "></div>
     <main>
-        <div class="alert alert-success info fixed-top" style="top:85px" id="messageSuccesPanier"></div>
+        <div class="alert alert-success info fixed-top" style="top:85px" id="messageSuccesPanier"><span
+                class="alert-link"><a th:href="@{/billetterie/panier}">Voir mon panier</a></span></div>
         <section class="row m-1 col-12 justify-content-center">
 
             <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 mx-3">
@@ -78,19 +79,19 @@
                         <div>Choisissez l'offre qui vous correspond :</div>
                         <div> <input class="choix-offre" type="radio" name="offreChoisie" th:id="|solo_${evenement.id}|"
                                 value="solo" th:attr="data-montant=${evenement.prixBillet}">
-                            <label for="solo">Solo : vous n'achetez qu'un seul ticket : <span
+                            <label for="solo">Solo : je n'achète qu'un seul ticket : <span
                                     th:text="|${#numbers.formatCurrency(evenement.prixBillet)}|"></span></label>
                         </div>
                         <div th:if="${evenement.capaciteMax - evenement.billetsVendus>1}"><input class="choix-offre"
                                 type="radio" name="offreChoisie" th:id="|duo_${evenement.id}|" value="duo"
                                 th:attr="data-montant=${2*0.95*evenement.prixBillet}">
-                            <label for="duo">Duo : vous achetez deux tickets (-5%) : <span
+                            <label for="duo">Duo : j'achète deux tickets (-5%) : <span
                                     th:text="|${#numbers.formatCurrency(2*0.95*evenement.prixBillet)}|"></span></label>
                         </div>
                         <div th:if="${evenement.capaciteMax - evenement.billetsVendus>3}"> <input class="choix-offre"
                                 type="radio" name="offreChoisie" th:id="|familiale_${evenement.id}|" value="familiale"
                                 th:attr="data-montant=${4*0.9*evenement.prixBillet}">
-                            <label for="familiale">Familiale : vous achetez quatre tickets (-10%) :
+                            <label for="familiale">Familiale : j'achète quatre tickets (-10%) :
                                 <span th:text="|${#numbers.formatCurrency(4*0.9*evenement.prixBillet)}|"></span></label>
                         </div>
                     </form>

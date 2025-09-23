@@ -1,25 +1,14 @@
 
-
-//Fonctionnalité de suppression
-document.querySelectorAll(".btn-suppression-panier").forEach(function (btn){
-    btn.addEventListener("click" ,(event)=>{
-        console.log("bouton cliqué");
-    const card = event.target.closest(".card");
-    if (card){
-        reservation_id = card.getAttribute("data-reservation");
-        console.log(reservation_id);
- 
-    }    
-
-    //Création de la requête post pour suppression du panier
+//Fonction de suppression d'un élément du panier
+function suppressionPanier(reservation_id, element){
     fetch ("/apiReservation/supprimerdupanier?reservation_id="+reservation_id,
         {
-        method: "DELETE",
+        method: "POST",
         headers: {"Content-Type" : "application/json", [csrf_header] : csrf_token},
           }).then((response)=>{
         if (response.ok){
-            card.classList.add("hidden-transition");
-            setTimeout(()=>{card.classList.add("hidden");location.reload()},500);
+            element.classList.add("hidden-transition");
+            setTimeout(()=>{element.classList.add("hidden");location.reload()},500);
             
             
         }
@@ -29,5 +18,33 @@ document.querySelectorAll(".btn-suppression-panier").forEach(function (btn){
     }).catch(error=>{
         console.log(error);
         alert("Erreur serveur ou script");});
+}
+
+
+// Vérification toutes les 60s que les éléments du panier sont toujours valables, si non suppression de l'élément
+setInterval(()=>{
+    document.querySelectorAll(".element-panier").forEach(
+    (element)=>{
+        validite = new Date(element.getAttribute("data-validite"));
+        dateValidite = Date.parse(validite);
+        console.log(dateValidite);
+        console.log(Date.now());
+        if (dateValidite<Date.now()){
+            console.log("Elément supprimé");
+            suppressionPanier(element.getAttribute("data-reservation"),element);           
+        }})
+    },60000)
+
+
+
+//Fonctionnalité de suppression au clic sur le bouton "Supprimer"
+document.querySelectorAll(".btn-suppression-panier").forEach(function (btn){
+    btn.addEventListener("click" ,(event)=>{
+    const element = event.target.closest(".element-panier");
+    if (element){
+        reservation_id = element.getAttribute("data-reservation"); 
+    }
+    suppressionPanier(reservation_id,element);    
 })
 })
+

@@ -1,6 +1,7 @@
 package fr.studi.billeterie_jo_2024.serviceimpl;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.repository.ReservationRepository;
 import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
+import fr.studi.billeterie_jo_2024.status.ResultatGetPanier;
 import fr.studi.billeterie_jo_2024.status.StatusReservation;
 
 @Service
@@ -41,29 +43,45 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public Reservation ajouterAuPanier(AAjouterAuPanierDTO panierDTO) {
-		System.out.println(panierDTO.getMontant());
-		System.out.println(panierDTO.getNomOffre());
+		// On crée un nouvel objet panier
 		Reservation panier = new Reservation();
 		panier.setStatusReservation(StatusReservation.PANIER);
-		panier.setDate(LocalDate.now());
+		// On lui attribue l'heure à laquelle elle a été ajoutée au panier, pour pouvoir
+		// déterminer son heure d'expiration
+		panier.setDate(LocalDateTime.now());
+		panier.setValidite(panier.getDate().plusHours(1));
+		// On attribue les paramètres envoyés par la request
 		panier.setMontant(panierDTO.getMontant());
-
 		Offre offre = offreRepository.findById(panierDTO.getNomOffre()).orElse(null);
 		panier.setOffreChoisie(offre);
 		Evenement evenement = evenementRepository.findById(panierDTO.getEvenement_id()).orElse(null);
 		panier.setEvenement(evenement);
+		// On attribue la réservation à l'utilisateur connecté
 		String mail = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utilisateur utilisateur = utilisateurRepository.findByMail(mail).orElse(null);
 		panier.setUtilisateur(utilisateur);
+		// On met à jour le nombre de billets disponibles
 		evenement.setBilletsVendus(evenement.getBilletsVendus() + offre.getNbPlaces());
 		evenementRepository.save(evenement);
 		return panier;
 	}
 
 	@Override
-	public List<Reservation> getPanier(Utilisateur utilisateur) {
-		return (reservationRepository.findByUtilisateurAndStatusReservation(utilisateur, StatusReservation.PANIER));
-
+	public ResultatGetPanier getPanier(Utilisateur utilisateur) {
+		List<Reservation> reservations = reservationRepository.findByUtilisateurAndStatusReservation(utilisateur,
+				StatusReservation.PANIER);
+		Boolean suppression = false;
+		Iterator<Reservation> iterator = reservations.iterator();
+		while (iterator.hasNext()) {
+			Reservation reservation = iterator.next();
+			if (reservation.getValidite().isBefore(LocalDateTime.now())) {
+				this.supprimerDuPanier(reservation.getId());
+				suppression = true;
+				iterator.remove();
+			}
+		}
+		System.out.println(suppression);
+		return new ResultatGetPanier(reservations, suppression);
 	}
 
 	@Override
@@ -81,9 +99,9 @@ public class ReservationServiceImpl implements ReservationService {
 	public void supprimerDuPanier(Long reservation_id) {
 		Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
 		Evenement evenement = reservation.getEvenement();
-		Offre offre = reservation.getOffreChoisie();
 		evenement.setBilletsVendus(evenement.getBilletsVendus() - reservation.getOffreChoisie().getNbPlaces());
-		reservationRepository.deleteById(reservation_id);
+		reservation.setStatusReservation(StatusReservation.EXPIREE);
+		reservationRepository.save(reservation);
 
 	}
 
