@@ -25,19 +25,26 @@
 <body>
     <div th:replace="fragments/header::header"></div>
     <main>
-        <section class="row m-1 col-12 justify-content-center">
+        <div class="fond-billetterie container text-center rounded p-1" style="margin-top:20px">
+            <h2 class="text-secondary">Les Jeux Olympiques de Paris 2024, c'est plus de 30 sports différents
+                !<br><br>
+                Choisissez celui qui vous plaît le plus et venez encourager les sportifs !</h2>
+            <section class="row m-1 col-12 justify-content-center">
 
-            <div th:each="sport : ${sports}" class="card col-12 col-md-2 mx-3 p-0 border-0">
-                <img th:with="imageName=${sport.replace(' ','-').toLowerCase()}"
-                    th:src="@{'/img/img_' + ${imageName} + '.jpg'}" alt="" class="img-fluid card-img-top">
-                <div class="card-body text-center">
-                    <h3 class="card-title" th:text="${sport.replace('-',' ')}"></h3>
-                    <a th:href="@{|/billetterie/pagesport?sport=${sport.replace(' ','-').toLowerCase}|}"
-                        class="stretched-link"></a>
+                <div th:each="sport : ${sports}" class="card col-12 col-md-2 mx-3 p-0 border-0">
+                    <img th:with="imageName=${sport.replace(' ','-').toLowerCase()}"
+                        th:src="@{'/img/img_' + ${imageName} + '.jpg'}" alt="" class="img-fluid card-img-top">
+                    <div class="card-body text-center">
+                        <h3 class="card-title" th:text="${sport.replace('-',' ')}"></h3>
+                        <a th:href="@{|/billetterie/pagesport?sport=${sport.replace(' ','-').toLowerCase}|}"
+                            class="stretched-link"></a>
+                    </div>
                 </div>
-            </div>
 
-        </section>
+
+
+            </section>
+        </div>
     </main>
 </body>
 

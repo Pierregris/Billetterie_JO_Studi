@@ -14,7 +14,7 @@ panier.forEach(
 );
 
 //Affichage du montant du panier
-textMontant = document.getElementById("montantPanier").textContent = totalPanier;
+document.getElementById("montantPanier").textContent = totalPanier;
 
 //Récupération de toutes les réservations à payer
 let reservationsAValider = new Array();
@@ -32,6 +32,7 @@ let codeSecurite = document.getElementById("codeSecurite");
 let btnPaiement = document.querySelector(".btn-payer");
 btnPaiement.addEventListener("click", (event)=>{
     event.preventDefault();
+    //Appel de "l'API" de paiement
     fetch("/apiReservation/paiement", {
         method: "POST",
         headers: {"Content-Type" : "application/json", [csrf_header] : csrf_token},
@@ -40,36 +41,45 @@ btnPaiement.addEventListener("click", (event)=>{
             nom : nom.value,
             codeSecurite : codeSecurite.value            
         })
-    } )
+    })
     .then(response=>{
-        if (response.ok){
-            return response.json()
-        } else{
-            throw new Error ("Echec du paiement"); 
-            }
+        //On vérifie la validité des données transmises
+        if (!response.ok){
+            document.getElementById("messageErreurPaiement").classList.add("affInfo");
+             throw new Error ("Echec du paiement, données invalides"); 
+             
+        } 
+        return response.json();              
         })
         .then(data=>{
-            if (data===true){
+            if (data!==true){throw new Error ("Echec du paiement");}
+
             console.log("paiement réussi !");
-            window.location.href = "/billetterie/paiementsuccess";
             
-            fetch("/apiReservation/validerPanier",{
+            
+            //On passe les réservations du panier en status "Finalisée"
+            return fetch("/apiReservation/validerPanier",{
                 method: "POST",
                 headers: {"Content-Type" : "application/json", [csrf_header] : csrf_token},
                 body : JSON.stringify(reservationsAValider)
             })
-            .then(response=>{
-                if (response.ok){
-                    console.log("validation réussie !")
-                    } else{
-                        throw new Error ("Echec de la validation"); 
-                    }
-                })
-
-
-            } else {
-                throw new Error ("Echec du paiement");
-                }
         })
-    })
+            .then(response=>{
+                if (!response.ok){throw new Error ("Echec de la validation"); }
+
+                    console.log("validation réussie !");
+
+                    //On crée les clés d'achat associées à chaque réservation
+                    return fetch("/apiReservation/creerclesachat",{
+                        method: "POST",
+                        headers: {"Content-Type" : "application/json", [csrf_header] : csrf_token},
+                        body : JSON.stringify(reservationsAValider)})
+                    })
+                    .then(response=>{
+                        if (!response.ok){throw new Error ("Echec lors de la génération des clés");}
+
+                        console.log("Génération des clés effectuée")
+                        window.location.href = "/billetterie/paiementsuccess";
+                        })
+                })
 

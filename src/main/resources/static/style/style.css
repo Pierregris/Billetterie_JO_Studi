@@ -14,6 +14,9 @@ main{
     padding-top: 75px;
 }
 
+.fond-billetterie{
+    background-color:  rgba(255, 255, 255, 0.7);
+}
 
 .formulaire {
     width : 50%;
@@ -21,23 +24,23 @@ main{
     margin:auto;
     margin-top : 50px;
     background-color: rgba(255,255,255,0.9);
-    border-radius : 20px;
+    border-radius : 10px;
     opacity: 0.9;
 }
 
-.nomCompte{
+.nav-link{
     padding-bottom: 0px;
 }
 
-.deconnexion{
-    padding: 0px;
-    font-size: 0.9rem;
-    margin-top:0px;
+.nav-item:hover{
+    border-bottom: solid;
+    border-color: gray;
+    border-radius: 10%;
+    transition: ease 0.1s;
 }
 
-.deconnexion:hover{
-    cursor: pointer;
-}
+
+
 
 .form-control{
     margin:5px;
@@ -80,6 +83,7 @@ h1{
 .card:hover{
     transform: scale(1.02);
     transition : 0.4s;
+    overflow: hidden;
     
 }
 
@@ -99,8 +103,19 @@ object-fit: cover;
 }
 
 .panier-recap{
-    height: 80vh;
+    max-height: 80vh;
+    height : auto;
     top:85px;
+}
+
+.panier-row{
+    align-items: flex-start;
+}
+
+.card-content{
+
+    overflow-y: auto;
+
 }
 
 .panier-recap:hover{
@@ -127,4 +142,9 @@ transition:3s;}
 
 .hidden{
     display: none;
+}
+
+.corbeille:hover{
+    transform: scale(1.1);
+    overflow: hidden;
 }

@@ -1,6 +1,7 @@
 package fr.studi.billeterie_jo_2024.pojo;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import fr.studi.billeterie_jo_2024.status.StatusReservation;
 import jakarta.persistence.Entity;
@@ -35,6 +36,8 @@ public class Reservation {
 
 	private StatusReservation statusReservation;
 
+	private UUID cléAchat;
+
 	@ManyToOne
 	@JoinColumn(name = "utilisateur_id")
 	private Utilisateur utilisateur;
@@ -44,6 +47,14 @@ public class Reservation {
 	@ManyToOne
 	@JoinColumn(name = "evenement_id")
 	private Evenement evenement;
+
+	public UUID getCléAchat() {
+		return cléAchat;
+	}
+
+	public void setCléAchat(UUID cléAchat) {
+		this.cléAchat = cléAchat;
+	}
 
 	public Evenement getEvenement() {
 		return evenement;

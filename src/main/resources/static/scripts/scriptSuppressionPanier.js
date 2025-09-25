@@ -16,7 +16,7 @@ function suppressionPanier(reservation_id, element){
             throw new Error ("Erreur lors de la suppression");
         }
     }).catch(error=>{
-        console.log(error);
+        console.log(error.message);
         alert("Erreur serveur ou script");});
 }
 
@@ -27,8 +27,6 @@ setInterval(()=>{
     (element)=>{
         validite = new Date(element.getAttribute("data-validite"));
         dateValidite = Date.parse(validite);
-        console.log(dateValidite);
-        console.log(Date.now());
         if (dateValidite<Date.now()){
             console.log("Elément supprimé");
             suppressionPanier(element.getAttribute("data-reservation"),element);           

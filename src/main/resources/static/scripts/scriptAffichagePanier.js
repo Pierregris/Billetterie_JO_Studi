@@ -13,5 +13,5 @@ return totalPanier;}
 
 //Affichage du montant
 let panier = document.querySelectorAll(".element-panier");
-document.getElementById("montantPanier").textContent = "Montant total du panier : "+calculMontantPanier(panier)+" €";
+document.getElementById("montantPanier").textContent = calculMontantPanier(panier).toFixed(2)+" €";
 

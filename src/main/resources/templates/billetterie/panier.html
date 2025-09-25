@@ -21,35 +21,45 @@
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
-    <title th:text="${pageTitle}"></title>
+    <title>Panier</title>
 </head>
 
 <body>
     <div th:replace="fragments/header::header "></div>
     <main>
-        <section class="row m-1">
+        <section class="row m-1 panier-row">
             <div class="alert alert-warning" th:if="${suppression}">Certaines réservations ont été supprimées de
                 votre panier car elles étaient arrivées à expiration (validité d'une heure à compter de l'ajout au
                 panier)
             </div>
 
             <div class="container-fluid col-7  ">
-                <div class="container alert alert-light m-2" th:if="${#lists.isEmpty(panier)}">Votre panier est vide
+                <div class="container alert alert-light m-2 opacity-75" th:if="${#lists.isEmpty(panier)}">Votre panier
+                    est vide
                 </div>
-                <div th:each="reservation : ${panier}" class="element-panier card col-12 mx-3" th:id="${reservation.id}"
+                <div th:each="reservation : ${panier}" class="element-panier card mx-3 p-0" th:id="${reservation.id}"
                     th:attr="data-reservation=${reservation.id}, data-montant=${reservation.montant}, data-validite=${reservation.validite}">
 
-                    <div class="card-body text-center">
-
-                        <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
-                        <p class="card-text" th:text="|Montant : ${reservation.montant}€|"></p>
-                        <p class="card-text"
-                            th:text="|Valable jusqu'à : ${#temporals.format(reservation.validite, 'HH:mm')}|"></p>
-
-
-                        <a class="btn btn-primary btn-suppression-panier"
-                            th:id="|btn-suppression-panier_${reservation.id}|">Supprimer du
-                            panier</a>
+                    <div class="card-body row d-flex p-0 overflow-hidden">
+                        <div class="col-10">
+                            <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
+                            <p class="card-text" th:text="|Montant : ${reservation.montant}€|"></p>
+                            <p class="card-text"
+                                th:text="|Valable jusqu'à : ${#temporals.format(reservation.validite, 'HH:mm')}|"></p>
+                        </div>
+                        <div class="corbeille col-2 d-flex align-items-stretch justify-content-end">
+                            <div class="card-footer d-flex align-items-center position-relative">
+                                <a class="btn btn-suppression-panier stretched-link"
+                                    th:id="|btn-suppression-panier_${reservation.id}|">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                        class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path
+                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                        <path
+                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                    </svg></a>
+                            </div>
+                        </div>
 
 
 
@@ -58,11 +68,33 @@
                 </div>
             </div>
 
-            <div class="card col-4  panier-recap sticky-top p-0">
+            <div class="card col-4 panier-recap sticky-top p-0 d-flex flex-column">
                 <h3 class="card-header text-center">Récapitulatif du panier</h3>
-                <p id="montantPanier"></p>
-                <a class="btn btn-primary " th:href="@{/billetterie/commande}">Valider et passer
-                    commande</a>
+                <div class="card-content flex-grow-1">
+                    <div th:each="reservation : ${panier}" class="card-text border-bottom">
+                        <p class="d-flex justify-content-between p-2 border-1">
+                            <span class=""
+                                th:text="|${reservation.evenement.sport} : ${reservation.evenement.nomEvenement}|"></span>
+                            <span class="d-flex align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" transform="rotate(60)" fill="currentColor" class="bi bi-ticket"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
+                                </svg><span th:text="|x ${reservation.offreChoisie.nbPlaces}|"></span></span>
+                            <span th:text="|${reservation.montant} €|"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p class="d-flex justify-content-between p-0 border-1">
+                        <span class="fw-bold">Total à payer :</span>
+                        <span class="fw-bold" id="montantPanier"></span>
+                    </p>
+                    <div class="text-center">
+                        <a class="btn btn-primary m-1" th:href="@{/billetterie/commande}">Je commande</a>
+                    </div>
+                </div>
+            </div>
             </div>
         </section>
 

@@ -28,42 +28,63 @@
 <body>
     <div th:replace="fragments/header::header "></div>
     <main>
-        <div class="alert alert-success info fixed-top" style="top:85px" id="messageSuccesPanier"><span
-                class="alert-link"><a th:href="@{/billetterie/panier}">Voir mon panier</a></span></div>
-        <section class="row m-1 col-12 justify-content-center">
+        <div class="fond-billetterie container text-center rounded p-1">
 
-            <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 mx-3">
-                <div class="card-body text-center">
+            <nav aria-label="breadcrumb" class="m-2 d-flex justify-content-center">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a class="link-secondary" href="/billetterie">Billetterie</a></li>
+                    <li class="breadcrumb-item active " th:text="${evenements[1].sport}"></li>
+                </ol>
+            </nav>
 
-                    <h3 class="card-title" th:text="${evenement.nomEvenement}"></h3>
-                    <p class="card-text"
-                        th:text="|le ${#temporals.format(evenement.dateEvenement, 'dd/MM/yyyy')}, à ${evenement.heureEvenement} à ${evenement.lieu}">
-                    </p>
-                    <div th:with="imageName=${evenement.sport.toLowerCase()}">
-                        <img th:src="@{'/img/img_' + ${imageName} + '.jpg'}" alt="" class="img-fluid m-0">
+            <h2 class="text-secondary"
+                th:text="|Voici tous les événements à venir en ${evenements[1].sport.toLowerCase()}.|">
+            </h2><br>
+            <h2 class="text-secondary">Choisissez l'offre qui vous correspond, commandez vos billets et écrivez
+                l'histoire
+                avec nos
+                champions !</h2>
+
+
+
+
+            <div class="alert alert-success fixed-top info" style="top:85px" id="messageSuccesPanier">
+            </div>
+
+            <section class="row m-1 col-12 justify-content-center">
+
+                <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 mx-3">
+                    <div class="card-body text-center">
+
+                        <h3 class="card-title" th:text="${evenement.nomEvenement}"></h3>
+                        <p class="card-text"
+                            th:text="|le ${#temporals.format(evenement.dateEvenement, 'dd/MM/yyyy')}, à ${evenement.heureEvenement} à ${evenement.lieu}">
+                        </p>
+
+
+                        <p class="card-text" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}"
+                            th:text="|Prix d'un billet : ${#numbers.formatCurrency(evenement.prixBillet)}|"></p>
+                        <a class="btn btn-primary m-2" th:data-bs-target="|#modalCommande_${evenement.id}|"
+                            data-bs-toggle="modal" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}">Je
+                            prends mes places !</a>
+                        <a href="" class="btn btn-primary m-2"
+                            th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">Je souhaite m'inscrire sur
+                            liste
+                            d'attente</a>
+                        <p class="card-text alert alert-warning m-1 p-1"
+                            th:if="${evenement.capaciteMax - evenement.billetsVendus < 100 and evenement.capaciteMax - evenement.billetsVendus > 0}"
+                            th:text="|Plus que ${evenement.capaciteMax - evenement.billetsVendus} places disponibles !|">
+                        </p>
+                        <p class="card-text alert alert-danger m-1 p-1"
+                            th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">
+                            Complet</p>
+
                     </div>
-
-                    <p class="card-text" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}"
-                        th:text="|Prix d'un billet : ${#numbers.formatCurrency(evenement.prixBillet)}|"></p>
-                    <a class="btn btn-primary m-2" th:data-bs-target="|#modalCommande_${evenement.id}|"
-                        data-bs-toggle="modal" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}">Je
-                        prends mes places !</a>
-                    <a href="" class="btn btn-primary m-2"
-                        th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">Je souhaite m'inscrire sur liste
-                        d'attente</a>
-                    <p class="card-text alert alert-warning m-1 p-1"
-                        th:if="${evenement.capaciteMax - evenement.billetsVendus < 100 and evenement.capaciteMax - evenement.billetsVendus > 0}"
-                        th:text="|Plus que ${evenement.capaciteMax - evenement.billetsVendus} places disponibles !|">
-                    </p>
-                    <p class="card-text alert alert-danger m-1 p-1"
-                        th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">
-                        Complet</p>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
+        </div>
     </main>
 
     <div th:each="evenement:${evenements}" class="modal" th:id="|modalCommande_${evenement.id}|"
