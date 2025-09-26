@@ -18,11 +18,12 @@
 
     <script th:src="@{/scripts/scriptDeconnexion.js}" defer></script>
     <script th:src="@{/scripts/scriptBilletterie.js}" defer></script>
+    <script th:src="@{/scripts/scriptNbElementsPanier.js}" defer></script>
 
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
-    <title th:text="${pageTitle}"></title>
+    <title th:text="|Billetterie ${evenements[0].sport.toLowerCase}"></title>
 </head>
 
 <body>
@@ -33,12 +34,12 @@
             <nav aria-label="breadcrumb" class="m-2 d-flex justify-content-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="link-secondary" href="/billetterie">Billetterie</a></li>
-                    <li class="breadcrumb-item active " th:text="${evenements[1].sport}"></li>
+                    <li class="breadcrumb-item active " th:text="${evenements[0].sport}"></li>
                 </ol>
             </nav>
 
             <h2 class="text-secondary"
-                th:text="|Voici tous les événements à venir en ${evenements[1].sport.toLowerCase()}.|">
+                th:text="|Voici tous les événements à venir en ${evenements[0].sport.toLowerCase()}.|">
             </h2><br>
             <h2 class="text-secondary">Choisissez l'offre qui vous correspond, commandez vos billets et écrivez
                 l'histoire
@@ -48,12 +49,15 @@
 
 
 
-            <div class="alert alert-success fixed-top info" style="top:85px" id="messageSuccesPanier">
+            <div class="alert alert-success fixed-top hidden info" style="top:85px" id="messageSuccesPanier">
+                Vos billets ont bien été ajoutés au panier <span><a class='alert-link' href='/billetterie/panier'>Voir
+                        mon panier</a></span>
             </div>
 
             <section class="row m-1 col-12 justify-content-center">
 
-                <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 mx-3">
+                <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 mx-3"
+                    th:attr="data-evenement=${evenement.id}">
                     <div class="card-body text-center">
 
                         <h3 class="card-title" th:text="${evenement.nomEvenement}"></h3>
@@ -64,19 +68,17 @@
 
                         <p class="card-text" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}"
                             th:text="|Prix d'un billet : ${#numbers.formatCurrency(evenement.prixBillet)}|"></p>
-                        <a class="btn btn-primary m-2" th:data-bs-target="|#modalCommande_${evenement.id}|"
+                        <a class="btn btn-success rounded-pill m-2" th:data-bs-target="|#modalCommande_${evenement.id}|"
                             data-bs-toggle="modal" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}">Je
                             prends mes places !</a>
-                        <a href="" class="btn btn-primary m-2"
+                        <a href="" class="btn btn-success m-2"
                             th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">Je souhaite m'inscrire sur
                             liste
                             d'attente</a>
-                        <p class="card-text alert alert-warning m-1 p-1"
-                            th:if="${evenement.capaciteMax - evenement.billetsVendus < 100 and evenement.capaciteMax - evenement.billetsVendus > 0}"
-                            th:text="|Plus que ${evenement.capaciteMax - evenement.billetsVendus} places disponibles !|">
+                        <p class="card-text alert alert-warning m-1 p-1 hidden" th:id="|info-places-${evenement.id}|">
                         </p>
-                        <p class="card-text alert alert-danger m-1 p-1"
-                            th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">
+
+                        <p class="card-text alert alert-danger m-1 p-1 hidden" th:id="|info-complet-${evenement.id}|">
                             Complet</p>
 
                     </div>
@@ -90,38 +92,55 @@
     <div th:each="evenement:${evenements}" class="modal" th:id="|modalCommande_${evenement.id}|"
         th:attr="data-evenement-id=${evenement.id}">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content p-4">
                 <div class="modal-header">
-                    <h3>Commander des places</h3>
+                    <h3>Je prends mes places</h3>
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body text-start">
-                    <form id="form-choix-offre" action="">
-                        <div>Choisissez l'offre qui vous correspond :</div>
-                        <div> <input class="choix-offre" type="radio" name="offreChoisie" th:id="|solo_${evenement.id}|"
-                                value="solo" th:attr="data-montant=${evenement.prixBillet}">
-                            <label for="solo">Solo : je n'achète qu'un seul ticket : <span
-                                    th:text="|${#numbers.formatCurrency(evenement.prixBillet)}|"></span></label>
-                        </div>
-                        <div th:if="${evenement.capaciteMax - evenement.billetsVendus>1}"><input class="choix-offre"
-                                type="radio" name="offreChoisie" th:id="|duo_${evenement.id}|" value="duo"
-                                th:attr="data-montant=${2*0.95*evenement.prixBillet}">
-                            <label for="duo">Duo : j'achète deux tickets (-5%) : <span
-                                    th:text="|${#numbers.formatCurrency(2*0.95*evenement.prixBillet)}|"></span></label>
-                        </div>
-                        <div th:if="${evenement.capaciteMax - evenement.billetsVendus>3}"> <input class="choix-offre"
-                                type="radio" name="offreChoisie" th:id="|familiale_${evenement.id}|" value="familiale"
-                                th:attr="data-montant=${4*0.9*evenement.prixBillet}">
-                            <label for="familiale">Familiale : j'achète quatre tickets (-10%) :
-                                <span th:text="|${#numbers.formatCurrency(4*0.9*evenement.prixBillet)}|"></span></label>
-                        </div>
-                    </form>
+                <div class="modal-body text-start py-0">
+                    <div class="row card-text d-flex align-items-center border-bottom py-2">
+                        <p class="col-8 my-auto text-end">Offre solo : je n'achète qu'un seul ticket</p>
+                        <a href="#" th:id="|btn-offre-solo-${evenement.id}|"
+                            th:attr="data-montant=${evenement.prixBillet}, data-evenement=${evenement.id}, data-offre='solo'"
+                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-4"><span
+                                class="d-flex align-items-center">1<svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" transform="rotate(-60)" fill="currentColor" class="bi bi-ticket ms-1"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
+                                </svg></span><span>=</span><span
+                                th:text="|${#numbers.formatCurrency(evenement.prixBillet)}|"></span></a>
+                    </div>
+                    <div class="row card-text d-flex align-items-center border-bottom py-2">
+                        <p class="col-8 my-auto text-end">Offre duo : j'achète deux tickets et je bénéficie de
+                            <strong>5% de remise</strong>
+                        </p>
+                        <a href="#" th:id="|btn-offre-duo-${evenement.id}|"
+                            th:attr="data-montant=${2*0.95*evenement.prixBillet}, data-evenement=${evenement.id}, data-offre='duo'"
+                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-4"><span
+                                class="d-flex align-items-center">2<svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" transform="rotate(-60)" fill="currentColor" class="bi bi-ticket ms-1"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
+                                </svg></span><span>=</span><span
+                                th:text="|${#numbers.formatCurrency(2*0.95*evenement.prixBillet)}|"></span></a>
+                    </div>
+                    <div class="row card-text d-flex align-items-center border-bottom py-2">
+                        <p class="col-8 my-auto text-end">Offre familiale : j'achète quatre tickets et je
+                            bénéficie de <strong> 10% de remise</strong></p>
+                        <a href="#" th:id="|btn-offre-familiale-${evenement.id}|"
+                            th:attr="data-montant=${4*0.9*evenement.prixBillet}, data-evenement=${evenement.id}, data-offre='familiale'"
+                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-4"><span
+                                class="d-flex align-items-center">4<svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" transform="rotate(-60)" fill="currentColor" class="bi bi-ticket ms-1"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
+                                </svg></span><span>=</span><span
+                                th:text="|${#numbers.formatCurrency(4*0.9*evenement.prixBillet)}|"></span></a>
+                    </div>
                 </div>
-                <div class="modal-footer">Montant de la commande : <span id="montant"></span></div>
-                <button class="btn btn-primary m-1 btn-ajout-panier" th:id="|btn-ajout-panier_${evenement.id}|"
-                    type="button">Ajouter au
-                    panier</button>
-
             </div>
         </div>
     </div>

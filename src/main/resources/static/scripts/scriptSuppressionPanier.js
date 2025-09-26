@@ -1,4 +1,27 @@
 
+calculMontantPanier();
+
+
+
+
+
+//Fonction de calcul et affichage du montant total du panier
+function calculMontantPanier(){
+let panier = document.querySelectorAll(".element-panier");
+if (panier.length===0){
+    document.querySelector(".panier-vide").classList.remove("hidden");
+}
+let totalPanier = 0;
+panier.forEach(
+    (element)=>{
+        let montantElement = parseFloat(element.getAttribute("data-montant"));
+        totalPanier +=montantElement; 
+    }
+    );
+    document.getElementById("montantPanier").textContent = totalPanier.toFixed(2)+" €";
+}
+
+
 //Fonction de suppression d'un élément du panier
 function suppressionPanier(reservation_id, element){
     fetch ("/apiReservation/supprimerdupanier?reservation_id="+reservation_id,
@@ -8,9 +31,11 @@ function suppressionPanier(reservation_id, element){
           }).then((response)=>{
         if (response.ok){
             element.classList.add("hidden-transition");
-            setTimeout(()=>{element.classList.add("hidden");location.reload()},500);
-            
-            
+            setTimeout(()=>{
+                element.remove(); 
+                calculMontantPanier();
+                affNbElementsPanier();
+            },500);            
         }
         else {
             throw new Error ("Erreur lors de la suppression");
@@ -45,4 +70,12 @@ document.querySelectorAll(".btn-suppression-panier").forEach(function (btn){
     suppressionPanier(reservation_id,element);    
 })
 })
+
+
+
+
+
+
+
+
 

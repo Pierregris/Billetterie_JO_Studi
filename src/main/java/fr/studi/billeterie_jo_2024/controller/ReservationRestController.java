@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.dto.InfosPaiementDTO;
+import fr.studi.billeterie_jo_2024.pojo.Evenement;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
+import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.repository.EvenementRepository;
 import fr.studi.billeterie_jo_2024.repository.ReservationRepository;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import jakarta.validation.Valid;
@@ -21,19 +25,35 @@ import jakarta.validation.Valid;
 @RequestMapping("/apiReservation")
 public class ReservationRestController {
 
+	private final EvenementRepository evenementRepository;
+
 	private final ReservationRepository reservationRepository;
 
 	@Autowired
 	ReservationService reservationService;
 
-	ReservationRestController(ReservationRepository reservationRepository) {
+	ReservationRestController(ReservationRepository reservationRepository, EvenementRepository evenementRepository) {
 		this.reservationRepository = reservationRepository;
+		this.evenementRepository = evenementRepository;
 	}
 
 	@PostMapping("/ajouteraupanier")
 	public void ajouterAuPanier(@RequestBody AAjouterAuPanierDTO aAjouterAuPanier) {
 		Reservation ajoutPanier = reservationService.ajouterAuPanier(aAjouterAuPanier);
 		reservationService.createReservation(ajoutPanier);
+	}
+
+	@PostMapping("/placesrestantes")
+	public int placesRestantes(@RequestParam Long evenement_id) {
+		Evenement evenement = evenementRepository.findById(evenement_id).orElse(null);
+		return evenement.getCapaciteMax() - evenement.getBilletsVendus();
+	}
+
+	@PostMapping("/getpanier")
+	public int nbElementsPanier() {
+		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(reservationService.getPanier(utilisateur).getReservations());
+		return reservationService.getPanier(utilisateur).getReservations().size();
 	}
 
 	@PostMapping("/supprimerdupanier")
@@ -56,9 +76,6 @@ public class ReservationRestController {
 
 	@PostMapping("/creerclesachat")
 	public void creerClesAchat(@RequestBody List<Long> reservationListId) {
-		System.out.println(reservationListId);
-		System.out.println("entrée dans le script");
-
 		reservationListId.forEach(reservation_id -> {
 			Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
 			reservation.setCléAchat(UUID.randomUUID());
