@@ -33,7 +33,7 @@
                 th:attr="data-montant=${reservation.montant}, data-id=${reservation.id}"></div>
         </div>
 
-        <p id="montantPanier"></p>
+
         <div class="alert alert-warning" th:if="${suppression}">Certaines réservations ont été supprimées de votre
             panier car elles étaient arrivées à expiration (validité d'une heure à compter de l'ajout au panier)
         </div>
@@ -41,10 +41,11 @@
 
         <section class="m-1">
             <div class="formulaire">
-                <div class="alert alert-danger fixed-top info" style="top:85px" id="messageErreurPaiement">
-                    Le paiement n'a pas pu aboutir, veuillez vérifier les informations bancaires</div>
                 <form>
-
+                    <h2 class="text-center py-2">Paiement sécurisé de la commande</h2>
+                    <div class="alert alert-danger hidden" id="messageErreurPaiement">
+                        Le paiement n'a pas pu aboutir, veuillez vérifier les informations bancaires</div>
+                    <p id="montantPanier">Montant total de la commande :</p>
                     <div class="form-group"> <label for="numCarte">Numéro de carte bleue</label>
                         <input class="form-control" type="text" name="numCarte" id="numCarte" required>
                     </div>
@@ -70,12 +71,17 @@
 
                         <div class="form-group col-6">
                             <input type="submit" class="btn btn-success rounded-pill my-2 btn-payer" value="Payer">
+                            <p class="hidden text-center" id="patientezPaiement">Veuillez patienter, vérifications des
+                                informations
+                                de paiement en
+                                cours...</p>
                         </div>
                     </div>
                 </form>
             </div>
         </section>
     </main>
+    <div th:replace="fragments/footer::footer "></div>
 </body>
 
 </html>

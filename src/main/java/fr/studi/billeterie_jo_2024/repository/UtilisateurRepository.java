@@ -14,4 +14,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, UUID> 
 	// pour chaque utilisateur
 	Optional<Utilisateur> findByMail(String mail);
 
+	Optional<Utilisateur> findByActivationToken(UUID activationToken);
+
 }

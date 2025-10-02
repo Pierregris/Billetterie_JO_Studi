@@ -3,20 +3,24 @@ spring:
     name: billetterie-jo-2024
   datasource:
     url: jdbc:mariadb://mysql-pierregris.alwaysdata.net/pierregris_jo2024_studi
-    username: 428949_studi
-    password: billetterieJO2024!
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
+
           
   jpa:
    show-sql: true
+   
    hibernate:
-    ddl-auto: update
+    ddl-auto: create 
+
   
   mail:
     host: smtp.gmail.com
     port: 587
-    username: u2821793833@gmail.com
-    password: wuulfjwkhionrpzy
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
     properties:
       mail:
         smtp:

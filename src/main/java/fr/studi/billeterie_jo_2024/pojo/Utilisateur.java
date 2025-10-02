@@ -25,6 +25,10 @@ public class Utilisateur implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID cleUtilisateur;
 
+	private boolean active = false;
+
+	private UUID activationToken;
+
 	@Column
 	private String nom;
 	@Column
@@ -59,6 +63,22 @@ public class Utilisateur implements UserDetails {
 		this.mail = mail;
 		this.numeroTelephone = numeroTelephone;
 		this.password = password;
+	}
+
+	public UUID getActivationToken() {
+		return activationToken;
+	}
+
+	public void setActivationToken(UUID activationToken) {
+		this.activationToken = activationToken;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public UUID getCleUtilisateur() {
@@ -162,6 +182,11 @@ public class Utilisateur implements UserDetails {
 	@Override
 	public String getUsername() {
 		return mail;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return active;
 	}
 
 }

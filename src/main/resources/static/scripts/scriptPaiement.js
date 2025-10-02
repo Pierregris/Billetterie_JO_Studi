@@ -32,6 +32,8 @@ let codeSecurite = document.getElementById("codeSecurite");
 let btnPaiement = document.querySelector(".btn-payer");
 btnPaiement.addEventListener("click", (event)=>{
     event.preventDefault();
+    btnPaiement.disabled=true;
+    document.getElementById("patientezPaiement").classList.remove("hidden");
     //Appel de "l'API" de paiement
     fetch("/apiReservation/paiement", {
         method: "POST",
@@ -45,14 +47,18 @@ btnPaiement.addEventListener("click", (event)=>{
     .then(response=>{
         //On vérifie la validité des données transmises
         if (!response.ok){
-            document.getElementById("messageErreurPaiement").classList.add("affInfo");
+            document.getElementById("messageErreurPaiement").classList.remove("hidden");
+            document.getElementById("patientezPaiement").classList.add("hidden");
+            btnPaiement.disabled=false;
              throw new Error ("Echec du paiement, données invalides"); 
              
         } 
         return response.json();              
         })
         .then(data=>{
-            if (data!==true){throw new Error ("Echec du paiement");}
+            if (data!==true){throw new Error ("Echec du paiement");
+                btnPaiement.disabled=false;
+            }
 
             console.log("paiement réussi !");
             

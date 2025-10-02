@@ -10,11 +10,8 @@ affNbElementsPanier();
             })
             .then(response=> response.json())
             .then((data)=>{
-                console.log(data);
                 nbElementsPanier = data;
-                console.log(nbElementsPanier);  
 
-        
         if (nbElementsPanier!==0){
             document.querySelector(".nb-panier").textContent=nbElementsPanier;
             document.querySelector(".nb-panier").classList.remove("hidden");

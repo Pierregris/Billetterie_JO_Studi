@@ -1,5 +1,7 @@
 package fr.studi.billeterie_jo_2024.serviceimpl;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		String password_encode = passwordEncoder.encode(utilisateur.getPassword());
 		utilisateur.setPassword(password_encode);
 		utilisateur.setRole(Role.USER);
+		utilisateur.setActivationToken(UUID.randomUUID());
 		this.utilisateurRepository.save(utilisateur);
 	}
 

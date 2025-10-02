@@ -18,6 +18,8 @@
     <script th:src="@{/scripts/scriptDeconnexion.js}" defer></script>
     <script th:src="@{/scripts/scriptSuppressionPanier.js}" defer></script>
     <script th:src="@{/scripts/scriptNbElementsPanier.js}" defer></script>
+    <script src="https://unpkg.com/scrollreveal" defer></script>
+    <script th:src="@{/scripts/reveal.js}" defer></script>
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
@@ -100,6 +102,7 @@
 
 
     </main>
+    <div th:replace="fragments/footer::footer "></div>
 </body>
 
 </html>

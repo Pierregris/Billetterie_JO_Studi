@@ -1,6 +1,7 @@
 package fr.studi.billeterie_jo_2024.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
 import fr.studi.billeterie_jo_2024.service.EmailService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import fr.studi.billeterie_jo_2024.service.UtilisateurService;
@@ -24,6 +26,8 @@ import jakarta.validation.Valid;
 @Controller
 public class UtilisateurController {
 
+	private final UtilisateurRepository utilisateurRepository;
+
 	@Autowired
 	EmailService emailService;
 
@@ -32,6 +36,10 @@ public class UtilisateurController {
 
 	@Autowired
 	ReservationService reservationService;
+
+	UtilisateurController(UtilisateurRepository utilisateurRepository) {
+		this.utilisateurRepository = utilisateurRepository;
+	}
 
 	// A l'arrivée sur la page de connexion, on crée un utilisateur vide pour
 	// permettre le stockage des valeurs données dans le formulaire
@@ -56,9 +64,12 @@ public class UtilisateurController {
 			return "redirect:/register";
 		}
 		this.utilisateurService.createUtilisateur(utilisateur);
-		emailService.sendEmail(utilisateur.getMail(), "Inscription validée", "Vous êtes bien inscrit !");
+		String lienActivation = "http://localhost:8081/activation?token=" + utilisateur.getActivationToken();
+		String message = "Vous êtes bien inscrit ! Activez dès maintenant votre compte en cliquant sur ce bouton :"
+				+ lienActivation;
+		emailService.sendEmail(utilisateur.getMail(), "Inscription validée", message);
 		redirectAttributes.addFlashAttribute("messageSucces",
-				"Votre compte a été créé avec succès, vous pouvez maintenant vous connecter et accéder à la billetterie !");
+				"Votre compte a été créé avec succès, il ne vous reste plus qu'à l'activer en cliquant sur le lien reçu par email!");
 		return "redirect:/accueil";
 	}
 
@@ -85,4 +96,22 @@ public class UtilisateurController {
 	public String showAccueil() {
 		return "accueil";
 	}
+
+	@GetMapping("/activation")
+	public String activationUtilisateur(@RequestParam(value = "token", required = true) UUID activationToken,
+			Model model, RedirectAttributes redirectAttribute) {
+		System.out.println(activationToken);
+		Utilisateur utilisateur = utilisateurRepository.findByActivationToken(activationToken).orElse(null);
+		System.out.println(utilisateur.getNom());
+		if (utilisateur == null) {
+			redirectAttribute.addFlashAttribute("erreurActivation", "Le lien d'activation n'est pas valide");
+			return ("redirect:/accueil");
+		}
+		utilisateur.setActive(true);
+		utilisateur.setActivationToken(null);
+		utilisateurRepository.save(utilisateur);
+		redirectAttribute.addFlashAttribute("messageActivation", "Votre compte a été activé avec succès !");
+		return ("redirect:/accueil");
+	}
+
 }
