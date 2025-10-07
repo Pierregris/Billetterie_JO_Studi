@@ -11,12 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import fr.studi.billeterie_jo_2024.configuration.SpringSecurityConfig;
@@ -32,7 +32,7 @@ public class EvenementTests {
 	@Autowired
 	MockMvc mockMvc;
 
-	@MockBean
+	@MockitoBean
 	EvenementService evenementService;
 
 	@Test
@@ -70,7 +70,55 @@ public class EvenementTests {
 						.param("dateEvenement", "2024-08-01").param("heureEvenement", "18:00")
 						.param("lieu", "Accor Arena").param("prixBillet", "50").with(csrf()))
 				.andExpect(redirectedUrl("/admin/creerEvenement"));
+	}
 
+	@Test
+	public void testConsulterEvenement() throws Exception {
+		Utilisateur admin = new Utilisateur();
+		admin.setRole(Role.ADMIN);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(admin, "password",
+				admin.getAuthorities());
+		mockMvc.perform(get("/admin/consulterEvenement")
+				.with(SecurityMockMvcRequestPostProcessors.authentication(authentication))).andExpect(status().isOk())
+				.andExpect(view().name("admin/consulterEvenement")).andExpect(model().attributeExists("evenements"));
+	}
+
+	@Test
+	public void testConsulterEvenementWithUserProfile() throws Exception {
+		Utilisateur user = new Utilisateur();
+		user.setRole(Role.USER);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(user, "password",
+				user.getAuthorities());
+		mockMvc.perform(get("/admin/consulterEvenement")
+				.with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	public void testAccueilAdmin() throws Exception {
+		Utilisateur admin = new Utilisateur();
+		admin.setRole(Role.ADMIN);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(admin, "password",
+				admin.getAuthorities());
+		mockMvc.perform(get("/admin/").with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+				.andExpect(status().isOk()).andExpect(view().name("admin/accueilAdmin"));
+
+		mockMvc.perform(
+				get("/admin/accueilAdmin").with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+				.andExpect(status().isOk()).andExpect(view().name("admin/accueilAdmin"));
+	}
+
+	@Test
+	public void testAccueilAdminWithUserProfile() throws Exception {
+		Utilisateur user = new Utilisateur();
+		user.setRole(Role.USER);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(user, "password",
+				user.getAuthorities());
+		mockMvc.perform(get("/admin/").with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+				.andExpect(status().isForbidden());
+		mockMvc.perform(
+				get("/admin/accueilAdmin").with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+				.andExpect(status().isForbidden());
 	}
 
 }

@@ -40,7 +40,7 @@ public class EvenementController {
 		return "admin/consulterEvenement";
 	}
 
-	@GetMapping("/accueilAdmin")
+	@GetMapping({ "/accueilAdmin", "/" })
 	public String affPageAdmin() {
 		return "admin/accueilAdmin";
 	}

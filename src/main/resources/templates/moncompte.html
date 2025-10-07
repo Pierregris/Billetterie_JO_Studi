@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr">
 
-<head th:fragment="scriptImport(pageTitle)">
+<head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +17,7 @@
 
     <script th:src="@{/scripts/scriptDeconnexion.js}" defer></script>
     <script th:src="@{/scripts/scriptNbElementsPanier.js}" defer></script>
+    <script th:src="@{/scripts/scriptAffichageBillet.js}" defer></script>
 
 
 
@@ -28,18 +29,37 @@
 <body>
     <main>
         <div th:replace="fragments/header::header "></div>
-        <h1>Bienvenue sur votre compte</h1>
+        <h1 class="text-center">Retrouvez ici vos réservations finalisées pour les événements à venir :</h1>
+        <section class="container row align-items-center justify-content-center m-auto">
+            <div th:each="reservation : ${reservations}" class="reservation card col-3 p-0">
 
-        <div th:each="reservation : ${reservations}" class="reservation card col-3 mx-3">
+                <div class="card-body text-center p-0">
+                    <h3 class="card-header" th:text="${reservation.evenement.sport}"></h3>
+                    <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
+                    <p th:text="|${reservation.offreChoisie.nbPlaces} places|">
+                    </p>
+                    <p class="card-text"
+                        th:text="|Le ${#temporals.format(reservation.evenement.dateEvenement,'dd/MM/YYYY')} à ${reservation.evenement.heureEvenement}|">
+                    </p>
+                    <a class="btn btn-success rounded-pill mb-2 btn-afficher-billet"
+                        th:attr="data-bs-toggle='modal', data-bs-target='#modalBillet_' + ${reservation.id}, data-reservation=${reservation.id}">Voir
+                        mon billet</a>
+                </div>
+            </div>
+        </section>
 
-            <div class="card-body text-center p-0">
-                <h3 class="card-header" th:text="${reservation.evenement.sport}"></h3>
-                <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
-                <p class="card-text"
-                    th:text="|Le ${reservation.evenement.dateEvenement} à ${reservation.evenement.heureEvenement}|"></p>
-
-
-
+        <div th:each="reservation : ${reservations}" class="modal" th:id="|modalBillet_${reservation.id}|">
+            <div class=" modal-dialog p-0">
+                <div class="modal-content">
+                    <div class="modal-header text-center p-2 bg-success-subtle">
+                        <h4>Présentez ce QR Code à l'organisateur pour accéder à l'événement</h4>
+                        <button class="btn-close m-2" type="button" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h5 th:text="|${reservation.evenement.sport} - ${reservation.evenement.nomEvenement}|"></h5>
+                        <div th:id="|qrCode-${reservation.id}|"></div>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -7,32 +7,6 @@ document.querySelectorAll(".card").forEach(card=>{
     affPlacesRestantes(card.getAttribute("data-evenement"));});
 
 
-//Mise à jour le prix du panier en fonction de l'offre sélectionnée
-document.querySelectorAll(".choix-offre").forEach(function (radio) {
-    //On écoute les boutons radios du formulaire choix-offre
-    radio.addEventListener("change", function (event) {
-        // On récupère le montant correspondant au radio sélectionné
-        montant = event.target.getAttribute("data-montant");
-        // On récupère l'offre choisie
-        offreChoisie = event.target.value;
-        // On trouve la modale parente la plus proche
-        const modal = event.target.closest(".modal");
-        if (modal) {
-        // On récupère l'id de l'événement concerné
-        evenement_id = Number(modal.getAttribute("data-evenement-id"));
-            // On met jour le montant au niveau du span (id="montant")
-            const montantSpan = modal.querySelector("#montant");
-            if (montantSpan) {
-                montantSpan.textContent = Number(montant).toFixed(2)+"€";
-            }
-        }
-    });
-});
-
-
-
-
-
 //Fonctionnalité d'ajout au panier
 document.querySelectorAll(".btn-ajout-panier").forEach((btn)=>{
     btn.addEventListener("click" ,(event)=>{

@@ -1,7 +1,6 @@
 package fr.studi.billeterie_jo_2024.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.dto.InfosPaiementDTO;
+import fr.studi.billeterie_jo_2024.dto.QRCodeGenerationDTO;
 import fr.studi.billeterie_jo_2024.pojo.Evenement;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
@@ -77,11 +77,17 @@ public class ReservationRestController {
 	@PostMapping("/creerclesachat")
 	public void creerClesAchat(@RequestBody List<Long> reservationListId) {
 		reservationListId.forEach(reservation_id -> {
-			Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
-			reservation.setCléAchat(UUID.randomUUID());
-			reservationRepository.save(reservation);
-
+			reservationService.genererCleAchat(reservation_id);
 		});
+	}
+
+	@PostMapping("/genererqrcode")
+	public String genererQRCode(@RequestBody QRCodeGenerationDTO qrCodeGenerationDTO) {
+		Reservation reservation = reservationRepository.findById(qrCodeGenerationDTO.getReservation_id()).orElse(null);
+		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return (reservationService.genererQRCode(reservation.getCléAchat(), utilisateur.getCleUtilisateur(),
+				qrCodeGenerationDTO.getWidth(), qrCodeGenerationDTO.getHeight()));
+
 	}
 
 }

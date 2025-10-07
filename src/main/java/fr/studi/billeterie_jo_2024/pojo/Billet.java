@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Billet {
@@ -13,11 +13,9 @@ public class Billet {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "evenement_id")
-	private Evenement evenement;
+	private String qrCodeBase64;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "reservation_id")
 	private Reservation reservation;
 
@@ -29,14 +27,6 @@ public class Billet {
 		this.id = id;
 	}
 
-	public Evenement getEvenement() {
-		return evenement;
-	}
-
-	public void setEvenement(Evenement evenement) {
-		this.evenement = evenement;
-	}
-
 	public Reservation getReservation() {
 		return reservation;
 	}
@@ -45,14 +35,12 @@ public class Billet {
 		this.reservation = reservation;
 	}
 
-	public Float getPrix() {
-		return prix;
+	public String getQrCodeBase64() {
+		return qrCodeBase64;
 	}
 
-	public void setPrix(Float prix) {
-		this.prix = prix;
+	public void setQrCodeBase64(String qrCodeBase64) {
+		this.qrCodeBase64 = qrCodeBase64;
 	}
-
-	private Float prix;
 
 }

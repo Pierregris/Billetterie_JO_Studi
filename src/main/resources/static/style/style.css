@@ -20,13 +20,22 @@ body{
     
 }
 
-
+.bandeau-top{
+   /* background-image: url("../img/fond-billeterie.jpg");
+    background-size: cover;*/
+    background-color: rgba(30,50,30);
+    min-height: 50vh;
+}
 .reveal-right {
   min-width: 0;
   max-width: 100%;
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: normal;
+}
+
+.anneaux-blanc{
+    width:10%;
 }
 
 main{

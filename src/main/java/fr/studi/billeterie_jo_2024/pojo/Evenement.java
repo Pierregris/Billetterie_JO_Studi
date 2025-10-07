@@ -2,13 +2,11 @@ package fr.studi.billeterie_jo_2024.pojo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Evenement {
@@ -47,9 +45,6 @@ public class Evenement {
 	public void setLieu(String lieu) {
 		this.lieu = lieu;
 	}
-
-	@OneToMany(mappedBy = "evenement")
-	private List<Billet> billets;
 
 	public Evenement() {
 	}

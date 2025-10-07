@@ -64,10 +64,14 @@ public class UtilisateurController {
 			return "redirect:/register";
 		}
 		this.utilisateurService.createUtilisateur(utilisateur);
+		// On génère un lien avec le token d'activation qui permet de valider le compte
+		// dès que le lien est cliqué
 		String lienActivation = "http://localhost:8081/activation?token=" + utilisateur.getActivationToken();
+		// Envoi du lien par mail pour activation du compte
 		String message = "Vous êtes bien inscrit ! Activez dès maintenant votre compte en cliquant sur ce bouton :"
 				+ lienActivation;
 		emailService.sendEmail(utilisateur.getMail(), "Inscription validée", message);
+		// On affiche un message sur le site indiquant qu'il reste à valider le compte
 		redirectAttributes.addFlashAttribute("messageSucces",
 				"Votre compte a été créé avec succès, il ne vous reste plus qu'à l'activer en cliquant sur le lien reçu par email!");
 		return "redirect:/accueil";
@@ -100,9 +104,7 @@ public class UtilisateurController {
 	@GetMapping("/activation")
 	public String activationUtilisateur(@RequestParam(value = "token", required = true) UUID activationToken,
 			Model model, RedirectAttributes redirectAttribute) {
-		System.out.println(activationToken);
 		Utilisateur utilisateur = utilisateurRepository.findByActivationToken(activationToken).orElse(null);
-		System.out.println(utilisateur.getNom());
 		if (utilisateur == null) {
 			redirectAttribute.addFlashAttribute("erreurActivation", "Le lien d'activation n'est pas valide");
 			return ("redirect:/accueil");

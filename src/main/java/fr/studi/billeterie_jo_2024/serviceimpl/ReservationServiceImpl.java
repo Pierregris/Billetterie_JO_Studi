@@ -1,12 +1,16 @@
 package fr.studi.billeterie_jo_2024.serviceimpl;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.google.zxing.WriterException;
 
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.pojo.Evenement;
@@ -17,6 +21,7 @@ import fr.studi.billeterie_jo_2024.repository.EvenementRepository;
 import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.repository.ReservationRepository;
 import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
+import fr.studi.billeterie_jo_2024.service.QRCodeService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import fr.studi.billeterie_jo_2024.status.ResultatGetPanier;
 import fr.studi.billeterie_jo_2024.status.StatusReservation;
@@ -35,6 +40,9 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
 	OffreRepository offreRepository;
+
+	@Autowired
+	QRCodeService qrCodeService;
 
 	@Override
 	public void createReservation(Reservation reservation) {
@@ -111,6 +119,22 @@ public class ReservationServiceImpl implements ReservationService {
 		reservation.setStatusReservation(StatusReservation.FINALISEE);
 		reservationRepository.save(reservation);
 
+	}
+
+	@Override
+	public void genererCleAchat(Long reservation_id) {
+		Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
+		reservation.setCléAchat(UUID.randomUUID());
+		reservationRepository.save(reservation);
+	}
+
+	@Override
+	public String genererQRCode(UUID cleAchat, UUID utilisateur_id, int width, int height) {
+		try {
+			return qrCodeService.generateQRCodeBase64(width, height, cleAchat.toString() + utilisateur_id.toString());
+		} catch (WriterException | IOException e) {
+			return e.toString();
+		}
 	}
 
 }

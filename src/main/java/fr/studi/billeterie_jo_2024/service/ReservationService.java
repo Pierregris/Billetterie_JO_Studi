@@ -1,6 +1,7 @@
 package fr.studi.billeterie_jo_2024.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import fr.studi.billeterie_jo_2024.dto.AAjouterAuPanierDTO;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
@@ -22,4 +23,8 @@ public interface ReservationService {
 	void validerReservation(Long reservation_id);
 
 	List<Reservation> getReservationsFinalisees(Utilisateur utilisateur);
+
+	void genererCleAchat(Long reservation_id);
+
+	String genererQRCode(UUID cleAchat, UUID utilisateur_id, int width, int height);
 }

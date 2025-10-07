@@ -15,7 +15,6 @@ import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.service.EvenementService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
-import fr.studi.billeterie_jo_2024.status.ResultatGetPanier;
 
 @Controller
 @RequestMapping("/billetterie")
@@ -36,6 +35,7 @@ public class BilletterieController {
 
 	@GetMapping("/pagesport")
 	public String affPageSport(Model model, @RequestParam(name = "sport", required = true) String sport) {
+		System.out.println(sport);
 		List<Evenement> evenements = evenementService.getEvenementsBySport(sport);
 		model.addAttribute("evenements", evenements);
 		return "/billetterie/pagesport";
@@ -44,9 +44,8 @@ public class BilletterieController {
 	@GetMapping("/panier")
 	public String affPanier(Model model) {
 		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ResultatGetPanier resultatGetPanier = reservationService.getPanier(utilisateur);
-		List<Reservation> panier = resultatGetPanier.getReservations();
-		Boolean suppression = resultatGetPanier.getSuppression();
+		List<Reservation> panier = reservationService.getPanier(utilisateur).getReservations();
+		Boolean suppression = reservationService.getPanier(utilisateur).getSuppression();
 		model.addAttribute("panier", panier);
 		model.addAttribute("suppression", suppression);
 		return "/billetterie/panier";
