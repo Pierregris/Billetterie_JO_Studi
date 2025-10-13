@@ -16,4 +16,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, UUID> 
 
 	Optional<Utilisateur> findByActivationToken(UUID activationToken);
 
+	Optional<Utilisateur> findByOtp(String otp);
+
 }

@@ -66,15 +66,15 @@
                         </p>
 
 
-                        <p class="card-text" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}"
+                        <p class="card-text"
                             th:text="|Prix d'un billet : ${#numbers.formatCurrency(evenement.prixBillet)}|"></p>
-                        <a class="btn btn-success rounded-pill m-2" th:data-bs-target="|#modalCommande_${evenement.id}|"
-                            data-bs-toggle="modal" th:if="${evenement.capaciteMax - evenement.billetsVendus > 0}">Je
+                        <a th:id="|btn-places-${evenement.id}|" class="btn btn-success rounded-pill m-2"
+                            th:data-bs-target="|#modalCommande_${evenement.id}|" data-bs-toggle="modal">Je
                             prends mes places !</a>
-                        <a href="" class="btn btn-success m-2"
-                            th:if="${evenement.capaciteMax - evenement.billetsVendus == 0}">Je souhaite m'inscrire sur
-                            liste
-                            d'attente</a>
+                        <a href="" th:id="|btn-liste-attente-${evenement.id}|"
+                            class="btn btn-danger m-2 rounded-pill hidden">Je m'inscris
+                            sur
+                            liste d'attente</a>
                         <p class="card-text alert alert-warning m-1 p-1 hidden" th:id="|info-places-${evenement.id}|">
                         </p>
 
@@ -97,48 +97,23 @@
                     <h3>Je prends mes places</h3>
                     <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body text-start py-0">
-                    <div class="row card-text d-flex align-items-center border-bottom py-2">
-                        <p class="col-8 my-auto text-end">Offre solo : je n'achète qu'un seul ticket</p>
-                        <a href="#" th:id="|btn-offre-solo-${evenement.id}|"
-                            th:attr="data-montant=${evenement.prixBillet}, data-evenement=${evenement.id}, data-offre='solo'"
-                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-4"><span
-                                class="d-flex align-items-center">1<svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                    height="16" transform="rotate(-60)" fill="currentColor" class="bi bi-ticket ms-1"
-                                    viewBox="0 0 16 16">
+                <div class="modal-body text-start p-0 m-0">
+                    <div th:each="offre:${offres}" class="row card-text d-flex align-items-center border-bottom py-2"
+                        th:id="|div-${offre.nomOffre}-${evenement.id}|">
+                        <p class="col-9 my-auto text-end"
+                            th:text="|Offre ${offre.nomOffre}: ${offre.nbPlaces} billet(s) - ${#numbers.formatDecimal((1-offre.discount)*100,0,0)}% de réduction|">
+                            Offre solo : je n'achète
+                            qu'un seul ticket</p>
+                        <a href="#" th:id="|btn-offre-${offre.nomOffre}-${evenement.id}|"
+                            th:attr="data-montant=${evenement.prixBillet}*${offre.nbPlaces}*${offre.discount}, data-evenement=${evenement.id}, data-offre=${offre.nomOffre}, data-places=${offre.nbPlaces}"
+                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-3"><span
+                                class="d-flex align-items-center"><span th:text="${offre.nbPlaces}"></span><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" transform="rotate(-60)"
+                                    fill="currentColor" class="bi bi-ticket ms-1" viewBox="0 0 16 16">
                                     <path
                                         d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
                                 </svg></span><span>=</span><span
-                                th:text="|${#numbers.formatCurrency(evenement.prixBillet)}|"></span></a>
-                    </div>
-                    <div class="row card-text d-flex align-items-center border-bottom py-2">
-                        <p class="col-8 my-auto text-end">Offre duo : j'achète deux tickets et je bénéficie de
-                            <strong>5% de remise</strong>
-                        </p>
-                        <a href="#" th:id="|btn-offre-duo-${evenement.id}|"
-                            th:attr="data-montant=${2*0.95*evenement.prixBillet}, data-evenement=${evenement.id}, data-offre='duo'"
-                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-4"><span
-                                class="d-flex align-items-center">2<svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                    height="16" transform="rotate(-60)" fill="currentColor" class="bi bi-ticket ms-1"
-                                    viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
-                                </svg></span><span>=</span><span
-                                th:text="|${#numbers.formatCurrency(2*0.95*evenement.prixBillet)}|"></span></a>
-                    </div>
-                    <div class="row card-text d-flex align-items-center border-bottom py-2">
-                        <p class="col-8 my-auto text-end">Offre familiale : j'achète quatre tickets et je
-                            bénéficie de <strong> 10% de remise</strong></p>
-                        <a href="#" th:id="|btn-offre-familiale-${evenement.id}|"
-                            th:attr="data-montant=${4*0.9*evenement.prixBillet}, data-evenement=${evenement.id}, data-offre='familiale'"
-                            class="btn-ajout-panier btn btn-success rounded-pill d-flex align-items-center justify-content-between col-4"><span
-                                class="d-flex align-items-center">4<svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                    height="16" transform="rotate(-60)" fill="currentColor" class="bi bi-ticket ms-1"
-                                    viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
-                                </svg></span><span>=</span><span
-                                th:text="|${#numbers.formatCurrency(4*0.9*evenement.prixBillet)}|"></span></a>
+                                th:text="|${#numbers.formatCurrency(evenement.prixBillet*offre.nbPlaces*offre.discount)}|"></span></a>
                     </div>
                 </div>
             </div>

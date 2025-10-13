@@ -1,10 +1,16 @@
 package fr.studi.billeterie_jo_2024.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +32,12 @@ import jakarta.validation.Valid;
 @Controller
 public class UtilisateurController {
 
+	private final PasswordEncoder passwordEncoder;
+
 	private final UtilisateurRepository utilisateurRepository;
+
+	@Value("${app.base-url}")
+	String baseUrl;
 
 	@Autowired
 	EmailService emailService;
@@ -37,8 +48,9 @@ public class UtilisateurController {
 	@Autowired
 	ReservationService reservationService;
 
-	UtilisateurController(UtilisateurRepository utilisateurRepository) {
+	UtilisateurController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder) {
 		this.utilisateurRepository = utilisateurRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	// A l'arrivée sur la page de connexion, on crée un utilisateur vide pour
@@ -63,10 +75,11 @@ public class UtilisateurController {
 					"Un compte existe déjà avec cette adresse mail. Connectez-vous directement : ");
 			return "redirect:/register";
 		}
+		utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 		this.utilisateurService.createUtilisateur(utilisateur);
 		// On génère un lien avec le token d'activation qui permet de valider le compte
 		// dès que le lien est cliqué
-		String lienActivation = "http://localhost:8081/activation?token=" + utilisateur.getActivationToken();
+		String lienActivation = baseUrl + "/activation?token=" + utilisateur.getActivationToken();
 		// Envoi du lien par mail pour activation du compte
 		String message = "Vous êtes bien inscrit ! Activez dès maintenant votre compte en cliquant sur ce bouton :"
 				+ lienActivation;
@@ -86,6 +99,33 @@ public class UtilisateurController {
 		}
 		// Sinon, on affiche la page de connexion
 		return "login";
+	}
+
+	@GetMapping("/2fa")
+	public String get2Fa(Model model) {
+		model.addAttribute("otp", new String());
+		return "2fa";
+	}
+
+	@PostMapping("/2fa")
+	public String verifierOTP(@RequestParam String otp, RedirectAttributes redirectAttribute) {
+		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Utilisateur> utilisateurOTP = utilisateurRepository.findByOtp(otp);
+		if (utilisateurOTP.isEmpty()) {
+			redirectAttribute.addFlashAttribute("erreurOTP", "Le code saisi est incorrect, veuillez réessayer");
+			return ("redirect:/2fa");
+		}
+		if (utilisateur.getOtpValidity().isBefore(LocalDateTime.now())) {
+			redirectAttribute.addFlashAttribute("erreurOTPexpire", "OTP expiré");
+			return ("redirect:/2fa");
+		}
+		utilisateur.setOtp(null);
+		Authentication authUser = new UsernamePasswordAuthenticationToken(utilisateur, null,
+				utilisateur.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authUser);
+
+		return ("redirect:/accueil");
+
 	}
 
 	@GetMapping("/moncompte")

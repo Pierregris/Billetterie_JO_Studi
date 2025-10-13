@@ -65,8 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
 		Evenement evenement = evenementRepository.findById(panierDTO.getEvenement_id()).orElse(null);
 		panier.setEvenement(evenement);
 		// On attribue la réservation à l'utilisateur connecté
-		String mail = SecurityContextHolder.getContext().getAuthentication().getName();
-		Utilisateur utilisateur = utilisateurRepository.findByMail(mail).orElse(null);
+		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		panier.setUtilisateur(utilisateur);
 		// On met à jour le nombre de billets disponibles
 		evenement.setBilletsVendus(evenement.getBilletsVendus() + offre.getNbPlaces());
@@ -88,7 +87,6 @@ public class ReservationServiceImpl implements ReservationService {
 				iterator.remove();
 			}
 		}
-		System.out.println(suppression);
 		return new ResultatGetPanier(reservations, suppression);
 	}
 

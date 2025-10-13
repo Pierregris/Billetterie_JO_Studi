@@ -3,7 +3,6 @@ package fr.studi.billeterie_jo_2024.serviceimpl;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
@@ -17,14 +16,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	@Autowired
 	UtilisateurRepository utilisateurRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
-
 	@Override
 	public void createUtilisateur(Utilisateur utilisateur) {
-		// Encodage du mot de passe avant la mise en base de données
-		String password_encode = passwordEncoder.encode(utilisateur.getPassword());
-		utilisateur.setPassword(password_encode);
 		utilisateur.setRole(Role.USER);
 		utilisateur.setActivationToken(UUID.randomUUID());
 		this.utilisateurRepository.save(utilisateur);

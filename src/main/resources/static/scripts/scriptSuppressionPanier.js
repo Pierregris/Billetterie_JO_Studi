@@ -2,9 +2,6 @@
 calculMontantPanier();
 
 
-
-
-
 //Fonction de calcul et affichage du montant total du panier
 function calculMontantPanier(){
 let panier = document.querySelectorAll(".element-panier");

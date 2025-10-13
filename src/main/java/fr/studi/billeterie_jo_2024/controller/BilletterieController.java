@@ -1,5 +1,6 @@
 package fr.studi.billeterie_jo_2024.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.studi.billeterie_jo_2024.pojo.Evenement;
+import fr.studi.billeterie_jo_2024.pojo.Offre;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.service.EvenementService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 
@@ -26,6 +29,9 @@ public class BilletterieController {
 	@Autowired
 	ReservationService reservationService;
 
+	@Autowired
+	OffreRepository offreRepository;
+
 	@GetMapping("")
 	public String affBilletterie(Model model) {
 		List<String> sports = evenementService.getDistinctSports();
@@ -37,7 +43,10 @@ public class BilletterieController {
 	public String affPageSport(Model model, @RequestParam(name = "sport", required = true) String sport) {
 		System.out.println(sport);
 		List<Evenement> evenements = evenementService.getEvenementsBySport(sport);
+		List<Offre> offres = offreRepository.findAll();
+		offres.sort(Comparator.comparingInt(Offre::getNbPlaces));
 		model.addAttribute("evenements", evenements);
+		model.addAttribute("offres", offres);
 		return "/billetterie/pagesport";
 	}
 

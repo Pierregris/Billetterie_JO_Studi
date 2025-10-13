@@ -49,9 +49,10 @@ public class ReservationRestController {
 		return evenement.getCapaciteMax() - evenement.getBilletsVendus();
 	}
 
-	@PostMapping("/getpanier")
+	@PostMapping("/getnbelementspanier")
 	public int nbElementsPanier() {
 		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(utilisateur);
 		System.out.println(reservationService.getPanier(utilisateur).getReservations());
 		return reservationService.getPanier(utilisateur).getReservations().size();
 	}

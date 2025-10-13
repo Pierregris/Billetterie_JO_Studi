@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+
+<head th:replace="fragments/head :: scriptImport (pageTitle='[Administrateur] - Créer un nouvel événement')"></head>
+
+<body>
+    <div th:replace="fragments/header::header "></div>
+    <main>
+        <div class="alert alert-success text-center m-2" th:if="${succesAjoutOffre}" th:text="${succesAjoutOffre}">
+        </div>
+        <div class="formulaire">
+            <div class="text-center">
+                <h3>Créer une nouvelle offre</h3>
+            </div>
+            <form method="post" th:action="@{/admin/creerOffre}" th:object="${offre}">
+                <div class="form-group">
+                    <input class="form-control" type="text" th:field="*{nomOffre}" placeholder="Nom de l'offre"
+                        required>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="number" th:field="*{nbPlaces}" placeholder="Nombre de places"
+                        required>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="number" th:field="*{discount}"
+                        placeholder="Réduction à appliquer, en %" required>
+                </div>
+
+                <div class="text-center">
+                    <input class="btn btn-primary" type="submit" value="Créer l'offre">
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -14,6 +14,7 @@ spring:
    hibernate:
     ddl-auto: create 
 
+
   
   mail:
     host: smtp.gmail.com
@@ -34,6 +35,9 @@ logging:
     '[org.springframework.security]': debug
 
 server:
- port: 8081
+ port: ${PORT:8081}
+ 
+app:
+  base-url: ${APP_BASE_URL}
   
   

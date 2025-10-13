@@ -1,5 +1,6 @@
 package fr.studi.billeterie_jo_2024.pojo;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +29,9 @@ public class Utilisateur implements UserDetails {
 	private boolean active = false;
 
 	private UUID activationToken;
+
+	private String otp;
+	private LocalDateTime otpValidity;
 
 	@Column
 	private String nom;
@@ -63,6 +67,22 @@ public class Utilisateur implements UserDetails {
 		this.mail = mail;
 		this.numeroTelephone = numeroTelephone;
 		this.password = password;
+	}
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+
+	public LocalDateTime getOtpValidity() {
+		return otpValidity;
+	}
+
+	public void setOtpValidity(LocalDateTime otpValidity) {
+		this.otpValidity = otpValidity;
 	}
 
 	public UUID getActivationToken() {

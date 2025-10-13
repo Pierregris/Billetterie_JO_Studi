@@ -21,8 +21,14 @@
                         <div class="progress rounded-pill m-1" role="progressbar"
                             th:aria-valuenow="${evenement.billetsVendus}" th:aria-valuemax="${evenement.capaciteMax}"
                             aria-valuemin="0" style="height: 30px">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                            <div th:if="${evenement.billetsVendus}<${evenement.capaciteMax}"
+                                class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                                 th:style="|width: ${evenement.billetsVendus*100/evenement.capaciteMax}%|">
+                            </div>
+                            <div th:if="${evenement.billetsVendus}==${evenement.capaciteMax}"
+                                class="progress-bar bg-danger"
+                                th:style="|width: ${evenement.billetsVendus*100/evenement.capaciteMax}%|">
+                                <h4 class="texte-center">Complet</h4>
                             </div>
                         </div>
                     </div>

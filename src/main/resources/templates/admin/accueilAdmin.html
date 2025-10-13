@@ -6,7 +6,7 @@
 <body>
     <div th:replace="fragments/header::header"></div>
     <main>
-        <h1>Bienvenue sur votre page administrateur</h1>
+        <h1 class="text-center p-3">Bienvenue sur votre espace administrateur</h1>
         <section class="row m-1 col-12 justify-content-center">
 
             <div class="card col-12 col-md-4 m-1">
@@ -19,6 +19,17 @@
                     </p>
                     <img th:src="@{/img/img_athletisme.jpg}" alt="" class="img-fluid m-0">
                     <a class="btn btn-primary m-1" th:href="@{/admin/creerEvenement}">JE CREE UN EVENEMENT </a>
+                </div>
+            </div>
+
+            <div class="card col-12 col-md-4 m-1">
+                <div class="card-body text-center">
+
+                    <h3 class="card-title">Créer une nouvelle offre</h3>
+                    <p class="card-text">Ajouter une nouvelle offre pour les acheteurs. Renseignez le nombre de places
+                        inclus dans l'offre, la réduction offerte ainsi que le nom que vous donnerez à cette offre
+                    </p>
+                    <a class="btn btn-primary m-1" th:href="@{/admin/creerOffre}">JE CREE UNE OFFRE </a>
                 </div>
             </div>
 
