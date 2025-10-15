@@ -36,7 +36,7 @@ public class BilletterieController {
 	public String affBilletterie(Model model) {
 		List<String> sports = evenementService.getDistinctSports();
 		model.addAttribute("sports", sports);
-		return "/billetterie/accueilbilletterie";
+		return "billetterie/accueilbilletterie";
 	}
 
 	@GetMapping("/pagesport")
@@ -47,7 +47,7 @@ public class BilletterieController {
 		offres.sort(Comparator.comparingInt(Offre::getNbPlaces));
 		model.addAttribute("evenements", evenements);
 		model.addAttribute("offres", offres);
-		return "/billetterie/pagesport";
+		return "billetterie/pagesport";
 	}
 
 	@GetMapping("/panier")
@@ -57,7 +57,7 @@ public class BilletterieController {
 		Boolean suppression = reservationService.getPanier(utilisateur).getSuppression();
 		model.addAttribute("panier", panier);
 		model.addAttribute("suppression", suppression);
-		return "/billetterie/panier";
+		return "billetterie/panier";
 	}
 
 	@GetMapping("/commande")
@@ -67,11 +67,11 @@ public class BilletterieController {
 		Boolean suppression = reservationService.getPanier(utilisateur).getSuppression();
 		model.addAttribute("panier", panier);
 		model.addAttribute("suppression", suppression);
-		return "/billetterie/commande";
+		return "billetterie/commande";
 	}
 
 	@GetMapping("/paiementsuccess")
 	public String affPageSuccess() {
-		return "/billetterie/paiementsuccess";
+		return "billetterie/paiementsuccess";
 	}
 }

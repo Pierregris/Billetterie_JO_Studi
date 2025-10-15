@@ -19,9 +19,12 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import fr.studi.billeterie_jo_2024.configuration.AuthenticationDetailsSourceConfig;
 import fr.studi.billeterie_jo_2024.configuration.SpringSecurityConfig;
+import fr.studi.billeterie_jo_2024.configuration.TwoFactorAuthenticationSuccessHandler;
 import fr.studi.billeterie_jo_2024.controller.EvenementController;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.service.EvenementService;
 import fr.studi.billeterie_jo_2024.status.Role;
 
@@ -33,7 +36,16 @@ public class EvenementTests {
 	MockMvc mockMvc;
 
 	@MockitoBean
+	AuthenticationDetailsSourceConfig authenticationDetailsSourceConfig;
+
+	@MockitoBean
+	TwoFactorAuthenticationSuccessHandler twoFactorAuthenticationSuccessHandler;
+
+	@MockitoBean
 	EvenementService evenementService;
+
+	@MockitoBean
+	OffreRepository offreRepository;
 
 	@Test
 	public void testGetCreerEvenementWithAdminProfile() throws Exception {

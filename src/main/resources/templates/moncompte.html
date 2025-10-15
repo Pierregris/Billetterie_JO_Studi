@@ -23,6 +23,7 @@
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}" />
     <title>Compte utilisateur</title>
 </head>
 
@@ -31,7 +32,7 @@
         <div th:replace="fragments/header::header "></div>
         <h1 class="text-center">Retrouvez ici vos réservations finalisées pour les événements à venir :</h1>
         <section class="container row align-items-center justify-content-center m-auto">
-            <div th:each="reservation : ${reservations}" class="reservation card col-3 p-0">
+            <div th:each="reservation : ${reservations}" class="reservation card col-12 col-md-3 p-0">
 
                 <div class="card-body text-center p-0">
                     <h3 class="card-header" th:text="${reservation.evenement.sport}"></h3>

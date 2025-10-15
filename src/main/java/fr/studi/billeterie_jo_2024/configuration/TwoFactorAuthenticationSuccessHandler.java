@@ -50,13 +50,13 @@ public class TwoFactorAuthenticationSuccessHandler implements AuthenticationSucc
 
 		Utilisateur utilisateur = (Utilisateur) authentication.getPrincipal();
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("PRE_AUTH"));
+		authorities.add(new SimpleGrantedAuthority("ROLE_PRE_AUTH"));
 
 		Authentication preAuth = new UsernamePasswordAuthenticationToken(utilisateur, authentication.getCredentials(),
 				authorities);
 
 		Boolean isAdmin = utilisateur.getAuthorities().stream()
-				.anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+				.anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
 		if (isAdmin) {
 			response.sendRedirect("/accueil");

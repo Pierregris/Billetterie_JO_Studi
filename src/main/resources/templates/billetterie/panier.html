@@ -23,70 +23,73 @@
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}" />
     <title>Panier</title>
 </head>
 
 <body>
     <div th:replace="fragments/header::header "></div>
     <main>
-        <section class="row m-1 panier-row">
+        <section class="row m-1 panier-row  justify-content-center">
             <div class="alert alert-warning" th:if="${suppression}">Certaines réservations ont été supprimées de
                 votre panier car elles étaient arrivées à expiration (validité d'une heure à compter de l'ajout au
                 panier)
             </div>
+            <div class="d-none alert alert-warning" id="suppression-reservation">Certaines réservations ont été
+                supprimées de
+                votre panier car elles étaient arrivées à expiration (validité d'une heure à compter de l'ajout au
+                panier)
+            </div>
 
-            <div class="container-fluid col-8">
+            <div class="col-10 col-lg-8">
                 <div class="panier-vide container alert alert-light m-2 hidden">Votre panier
                     est vide
                 </div>
-                <div th:each="reservation : ${panier}" class="element-panier card mx-3 p-0" th:id="${reservation.id}"
+                <div th:each="reservation : ${panier}" class="element-panier card mx-3 mb-3 p-0"
+                    th:id="${reservation.id}"
                     th:attr="data-reservation=${reservation.id}, data-montant=${reservation.montant}, data-validite=${reservation.validite}">
 
-                    <div class="card-body row d-flex p-0 overflow-hidden">
-                        <div class="col-10">
-                            <h3 class="card-title" th:text="${reservation.evenement.nomEvenement}"></h3>
-                            <p class="card-text" th:text="|Montant : ${reservation.montant}€|"></p>
-                            <p class="card-text"
+                    <div class="card-body flex-column flex-md-row d-flex p-0 overflow-hidden">
+                        <div class="col-12 col-md-10">
+                            <h3 class="card-title text-center m-2 fw-bold"
+                                th:text="|${reservation.evenement.sport} : ${reservation.evenement.nomEvenement}|"></h3>
+                            <h4 class="card-title text-center m-2"
+                                th:text="|le ${#temporals.format(reservation.evenement.dateEvenement,'dd/MM/YYYY')} à ${#temporals.format(reservation.evenement.heureEvenement,'HH:mm')}|">
+                            </h4>
+                            <h5 class="card-text text-center"
+                                th:text="|Cette réservation vous donne un accès pour ${reservation.offreChoisie.nbPlaces} ${reservation.offreChoisie.nbPlaces==1 ? 'personne':'personnes'} à l'événement|">
+                            </h5>
+                            <p class="card-text text-center text-danger"
                                 th:text="|Valable jusqu'à : ${#temporals.format(reservation.validite, 'HH:mm')}|"></p>
+                            <h4 class="card-text text-end fw-bold me-3"
+                                th:text="|Montant de la réservation : ${#numbers.formatCurrency(reservation.montant)}|">
+                            </h4>
                         </div>
-                        <div class="corbeille col-2 d-flex align-items-stretch justify-content-end">
-                            <div class="card-footer d-flex align-items-center position-relative">
-                                <a class="btn btn-suppression-panier stretched-link"
-                                    th:id="|btn-suppression-panier_${reservation.id}|">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                                        class="bi bi-trash" viewBox="0 0 16 16">
-                                        <path
-                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                        <path
-                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                    </svg></a>
-                            </div>
+                        <div
+                            class="corbeille col-12 col-md-1 d-flex align-items-stretch justify-content-center bg-success-subtle ms-auto">
+                            <a class="d-flex btn btn-suppression-panier stretched-link  w-100 h-100 align-items-center justify-content-center"
+                                th:id="|btn-suppression-panier_${reservation.id}|">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                    class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path
+                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                    <path
+                                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                </svg>
+                            </a>
                         </div>
-
-
-
                     </div>
+
+
 
                 </div>
+
+            </div>
             </div>
 
-            <div class="card col-12 col-lg-3 panier-recap sticky-top p-0 d-flex flex-column">
+            <div class="card col-10 col-lg-3 panier-recap sticky-top p-0 d-flex flex-column">
                 <h3 class="card-header text-center">Récapitulatif</h3>
-                <!--                <div class="card-content flex-grow-1">
-                      <div th:each="reservation : ${panier}" class="card-text border-bottom">
-                        <p class="d-flex justify-content-between p-2 border-1">
-                            <span class="text-break col-5"
-                                th:text="|${reservation.evenement.sport} : ${reservation.evenement.nomEvenement}|"></span>
-                            <span class="d-flex align-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                    height="16" transform="rotate(60)" fill="currentColor" class="bi bi-ticket"
-                                    viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6zM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5z" />
-                                </svg><span th:text="| x ${reservation.offreChoisie.nbPlaces}|"></span></span>
-                            <span th:text="|${reservation.montant} €|"></span>
-                        </p>
-                    </div>
-                </div>-->
+
                 <div class="card-footer">
                     <p class="d-flex justify-content-between p-0 border-1">
                         <span class="fw-bold">Total à payer :</span>

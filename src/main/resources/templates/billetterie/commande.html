@@ -22,6 +22,7 @@
 
     <link rel="stylesheet" th:href="@{/style/style.css}">
 
+    <link rel="icon" type="image/png" th:href="@{/img/logo.png}" />
     <title th:text="${pageTitle}"></title>
 </head>
 
@@ -45,7 +46,7 @@
                     <h2 class="text-center py-2">Paiement sécurisé de la commande</h2>
                     <div class="alert alert-danger hidden" id="messageErreurPaiement">
                         Le paiement n'a pas pu aboutir, veuillez vérifier les informations bancaires</div>
-                    <p id="montantPanier">Montant total de la commande :</p>
+                    <p id="montantPanier" class="fw-bold"></p>
                     <div class="form-group"> <label for="numCarte">Numéro de carte bleue</label>
                         <input class="form-control" type="text" name="numCarte" id="numCarte" required>
                     </div>

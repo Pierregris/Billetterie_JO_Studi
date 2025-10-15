@@ -14,7 +14,7 @@ panier.forEach(
 );
 
 //Affichage du montant du panier
-document.getElementById("montantPanier").textContent = totalPanier;
+document.getElementById("montantPanier").textContent = "Montant total de la commande : "+ totalPanier.toFixed(2)+"€";
 
 //Récupération de toutes les réservations à payer
 let reservationsAValider = new Array();

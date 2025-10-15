@@ -10,13 +10,13 @@ public class Offre {
 
 	Integer nbPlaces;
 
-	Float discount;
+	Double discount;
 
-	public Float getDiscount() {
+	public Double getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(Float discount) {
+	public void setDiscount(Double discount) {
 		this.discount = discount;
 	}
 

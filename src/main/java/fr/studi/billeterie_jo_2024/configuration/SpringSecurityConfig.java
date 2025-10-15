@@ -29,11 +29,16 @@ public class SpringSecurityConfig {
 		http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 				.requestMatchers("/style/**", "/scripts/**", "/img/**", "/fonts/**", "/login", "/register", "/accueil",
 						"/", "/activation")
-				.permitAll().requestMatchers("/admin/**").hasAuthority("ADMIN").requestMatchers("/2fa")
-				.hasAuthority("PRE_AUTH").anyRequest().hasAnyAuthority("ADMIN", "USER"))
+				.permitAll().requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/2fa").hasRole("PRE_AUTH")
+				.anyRequest().hasAnyRole("ADMIN", "USER"))
 				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("mail")
+
+						.authenticationDetailsSource(authenticationDetailsSourceConfig)
 						.successHandler(twoFASuccessHandler))
-				.logout(logout -> logout.logoutSuccessUrl("/accueil").permitAll());
+				.logout(logout -> logout.logoutSuccessUrl("/accueil").invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID").permitAll())
+				.sessionManagement(session -> session.sessionConcurrency(
+						concurrency -> concurrency.maximumSessions(1).maxSessionsPreventsLogin(false)));
 		return http.build();
 	}
 

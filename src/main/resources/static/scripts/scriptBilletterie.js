@@ -10,6 +10,7 @@ document.querySelectorAll(".card").forEach(card=>{
 //Fonctionnalité d'ajout au panier
 document.querySelectorAll(".btn-ajout-panier").forEach((btn)=>{
     btn.addEventListener("click" ,(event)=>{
+        event.preventDefault();
         montant = parseFloat(event.currentTarget.getAttribute("data-montant"));
         offreChoisie = event.currentTarget.getAttribute("data-offre");
         evenement_id = event.currentTarget.getAttribute("data-evenement");
@@ -85,6 +86,19 @@ fetch("/apiReservation/placesrestantes?evenement_id="+evenement_id,{
    
 })
 }
+
+//Ajout sur liste d'attente
+document.querySelectorAll(".btn-liste-attente").forEach(btn=>{
+    btn.addEventListener("click",(event)=>{
+        event.preventDefault();
+        document.getElementById("messageListeAttente").classList.remove("hideInfo");
+        document.getElementById("messageListeAttente").classList.remove("hidden");
+        document.getElementById("messageListeAttente").classList.add("affInfo");
+
+        setTimeout(()=>document.getElementById("messageListeAttente").classList.add("hidden"),5000);
+        
+    })
+})
 
 
 

@@ -15,17 +15,16 @@
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"
     defer></script>
 
-
-
   <link rel="stylesheet" th:href="@{/style/style.css}">
 
+  <link rel="icon" type="image/png" th:href="@{/img/logo.png}" />
   <title>Inscription utilisateur</title>
 </head>
 
 <body class="login-register">
   <div th:replace="fragments/header::header "></div>
-  <main>
-    <div class="formulaire">
+  <main class="mb-3">
+    <div class="formulaire mb-3">
       <div class="text-center">
         <h3>JE M'INSCRIS</h3>
       </div>
@@ -54,11 +53,12 @@
         </div>
         <div class="form-group">
           <input class="form-control" type="password" th:field="*{password}" placeholder="Mot de passe"
-            pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}" required
-            oninvalid="this.setCustomValidity('Le mot de passe doit contenir au moins 10 caratères, un caractère spécial et une majuscule')">
+            pattern="(?=.*[A-Z])(?=.*[@$%!*?&-_])(?=.*[0-9]).{8,}" required
+            oninvalid="this.setCustomValidity('Le mot de passe doit contenir au moins 10 caratères dont au moins un chiffre, un caractère spécial et une majuscule')"
+            oninput="this.setCustomValidity('')">
         </div>
 
-        <div class="form-group">
+        <div class=" form-group">
           <input class="form-control" type="text" th:field="*{adresse}" placeholder="Numéro et nom de rue" required>
         </div>
         <div class="row">

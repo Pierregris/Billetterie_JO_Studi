@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +34,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.studi.billeterie_jo_2024.configuration.AuthenticationDetailsSourceConfig;
 import fr.studi.billeterie_jo_2024.configuration.SpringSecurityConfig;
+import fr.studi.billeterie_jo_2024.configuration.TwoFactorAuthenticationSuccessHandler;
 import fr.studi.billeterie_jo_2024.controller.UtilisateurController;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
@@ -51,6 +54,12 @@ public class UtilisateurTests {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+
+	@MockitoBean
+	AuthenticationDetailsSourceConfig authenticationDetailsSourceConfig;
+
+	@MockitoBean
+	TwoFactorAuthenticationSuccessHandler twoFactorAuthenticationSuccessHandler;
 
 	@MockitoBean
 	UtilisateurService utilisateurService;
@@ -78,7 +87,7 @@ public class UtilisateurTests {
 		mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("nom", "Dupond")
 				.param("prenom", "Jean").param("adresse", "rue de la Paix").param("codePostal", "75001")
 				.param("ville", "Paris").param("mail", "jeandupond@mail.fr").param("telephone", "0607080910")
-				.param("motDePasse", "motdepasse").with(csrf())).andExpect(redirectedUrl("/accueil"))
+				.param("password", "Motdepasse123!").with(csrf())).andExpect(redirectedUrl("/accueil"))
 				.andExpect(flash().attribute("messageSucces",
 						"Votre compte a été créé avec succès, il ne vous reste plus qu'à l'activer en cliquant sur le lien reçu par email!"));
 
@@ -111,8 +120,58 @@ public class UtilisateurTests {
 	}
 
 	@Test
-	public void testAffPageCompte() throws Exception {
+	public void testAffPageAccueil() throws Exception {
 		mockMvc.perform(get("/accueil", "/")).andExpect(view().name("accueil"));
+	}
+
+	@Test
+	public void testGet2fa() throws Exception {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setRole(Role.PRE_AUTH);
+		Authentication authentification = new UsernamePasswordAuthenticationToken(utilisateur, "password",
+				utilisateur.getAuthorities());
+
+		mockMvc.perform(get("/2fa").with(authentication(authentification))).andExpect(view().name("2fa"));
+	}
+
+	@Test
+	public void testCorrectOtp() throws Exception {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setRole(Role.PRE_AUTH);
+		Authentication authentification = new UsernamePasswordAuthenticationToken(utilisateur, "password",
+				utilisateur.getAuthorities());
+		utilisateur.setOtpValidity(LocalDateTime.now().plusMinutes(5));
+		String otp = "otpTest";
+		when(utilisateurRepository.findByOtp(otp)).thenReturn(Optional.of(utilisateur));
+		mockMvc.perform(post("/2fa").param("otp", otp).with(authentication(authentification)).with(csrf()))
+				.andExpect(redirectedUrl("/accueil"));
+	}
+
+	@Test
+	public void testInvalidOTP() throws Exception {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setRole(Role.PRE_AUTH);
+		Authentication authentification = new UsernamePasswordAuthenticationToken(utilisateur, "password",
+				utilisateur.getAuthorities());
+		utilisateur.setOtpValidity(LocalDateTime.now().plusMinutes(5));
+		String otp = "otpTest";
+		when(utilisateurRepository.findByOtp(otp)).thenReturn(Optional.empty());
+		mockMvc.perform(post("/2fa").param("otp", otp).with(authentication(authentification)).with(csrf()))
+				.andExpect(flash().attribute("erreurOTP", "Le code saisi est incorrect, veuillez réessayer"))
+				.andExpect(redirectedUrl("/2fa"));
+	}
+
+	@Test
+	public void testExpiredOTP() throws Exception {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setRole(Role.PRE_AUTH);
+		Authentication authentification = new UsernamePasswordAuthenticationToken(utilisateur, "password",
+				utilisateur.getAuthorities());
+		utilisateur.setOtpValidity(LocalDateTime.now().minusMinutes(5));
+		String otp = "otpTest";
+		when(utilisateurRepository.findByOtp(otp)).thenReturn(Optional.of(utilisateur));
+		mockMvc.perform(post("/2fa").param("otp", otp).with(authentication(authentification)).with(csrf()))
+				.andExpect(flash().attribute("erreurOTPexpire", "OTP expiré")).andExpect(redirectedUrl("/2fa"));
 	}
 
 	@Test

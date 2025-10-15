@@ -6,7 +6,7 @@
 <body>
     <div th:replace="fragments/header::header"></div>
     <main>
-        <section class="row m-1 col-12 justify-content-center">
+        <section class="row m-auto col-11 justify-content-center align-items-center">
 
             <div th:each="evenement : ${evenements}" class="card col-12 col-md-3 m-1">
                 <div class="card-body text-center">
@@ -37,6 +37,7 @@
 
         </section>
     </main>
+    <div th:replace="fragments/footer::footer"></div>
 </body>
 
 </html>

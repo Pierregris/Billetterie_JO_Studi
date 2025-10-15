@@ -1,6 +1,7 @@
 package fr.studi.billeterie_jo_2024.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +31,8 @@ import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
 import fr.studi.billeterie_jo_2024.service.EmailService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import fr.studi.billeterie_jo_2024.service.UtilisateurService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RequestMapping("/")
@@ -102,27 +109,39 @@ public class UtilisateurController {
 	}
 
 	@GetMapping("/2fa")
-	public String get2Fa(Model model) {
-		model.addAttribute("otp", new String());
+	public String get2Fa() {
 		return "2fa";
 	}
 
 	@PostMapping("/2fa")
-	public String verifierOTP(@RequestParam String otp, RedirectAttributes redirectAttribute) {
+	public String verifierOTP(@RequestParam String otp, RedirectAttributes redirectAttribute,
+			HttpServletRequest request, HttpServletResponse response) {
 		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Utilisateur> utilisateurOTP = utilisateurRepository.findByOtp(otp);
 		if (utilisateurOTP.isEmpty()) {
 			redirectAttribute.addFlashAttribute("erreurOTP", "Le code saisi est incorrect, veuillez réessayer");
 			return ("redirect:/2fa");
 		}
-		if (utilisateur.getOtpValidity().isBefore(LocalDateTime.now())) {
+		if (utilisateurOTP.get().getOtpValidity().isBefore(LocalDateTime.now())) {
 			redirectAttribute.addFlashAttribute("erreurOTPexpire", "OTP expiré");
 			return ("redirect:/2fa");
 		}
 		utilisateur.setOtp(null);
-		Authentication authUser = new UsernamePasswordAuthenticationToken(utilisateur, null,
-				utilisateur.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authUser);
+		utilisateur.setOtpValidity(null);
+		utilisateurRepository.save(utilisateur);
+
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+		Authentication authUser = new UsernamePasswordAuthenticationToken(utilisateur, null, authorities);
+
+		SecurityContext context = SecurityContextHolder.createEmptyContext();
+		context.setAuthentication(authUser);
+
+		HttpSessionSecurityContextRepository contextRepository = new HttpSessionSecurityContextRepository();
+		contextRepository.saveContext(context, request, response);
+
+		SecurityContextHolder.setContext(context);
 
 		return ("redirect:/accueil");
 

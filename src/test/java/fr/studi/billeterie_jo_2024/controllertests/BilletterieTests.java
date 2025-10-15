@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +19,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import fr.studi.billeterie_jo_2024.configuration.AuthenticationDetailsSourceConfig;
 import fr.studi.billeterie_jo_2024.configuration.SpringSecurityConfig;
+import fr.studi.billeterie_jo_2024.configuration.TwoFactorAuthenticationSuccessHandler;
 import fr.studi.billeterie_jo_2024.controller.BilletterieController;
 import fr.studi.billeterie_jo_2024.pojo.Evenement;
+import fr.studi.billeterie_jo_2024.pojo.Offre;
 import fr.studi.billeterie_jo_2024.pojo.Reservation;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.service.EvenementService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import fr.studi.billeterie_jo_2024.status.ResultatGetPanier;
@@ -36,10 +41,19 @@ public class BilletterieTests {
 	MockMvc mockMvc;
 
 	@MockitoBean
+	AuthenticationDetailsSourceConfig authenticationDetailsSourceConfig;
+
+	@MockitoBean
+	TwoFactorAuthenticationSuccessHandler twoFactorAuthenticationSuccessHandler;
+
+	@MockitoBean
 	EvenementService evenementService;
 
 	@MockitoBean
 	ReservationService reservationService;
+
+	@MockitoBean
+	OffreRepository offreRepository;
 
 	Utilisateur user;
 	Authentication authentication;
@@ -59,7 +73,7 @@ public class BilletterieTests {
 		when(evenementService.getDistinctSports()).thenReturn(sports);
 		mockMvc.perform(get("/billetterie").with(authentication(authentication)))
 				.andExpect(model().attribute("sports", sports))
-				.andExpect(view().name("/billetterie/accueilbilletterie"));
+				.andExpect(view().name("billetterie/accueilbilletterie"));
 	}
 
 	@Test
@@ -74,11 +88,25 @@ public class BilletterieTests {
 		ev2.setBilletsVendus(0);
 		ev2.setCapaciteMax(1000);
 		ev2.setPrixBillet(50);
+		Offre solo = new Offre();
+		solo.setDiscount(1.0);
+		solo.setNbPlaces(1);
+		solo.setNomOffre("solo");
+		Offre duo = new Offre();
+		duo.setDiscount(0.95);
+		duo.setNbPlaces(2);
+		duo.setNomOffre("duo");
+		Offre familiale = new Offre();
+		familiale.setDiscount(0.9);
+		familiale.setNbPlaces(4);
+		familiale.setNomOffre("familiale");
+		List<Offre> offres = new ArrayList<Offre>(List.of(solo, duo, familiale));
 		List<Evenement> evenements = List.of(ev1, ev2);
 		when(evenementService.getEvenementsBySport("basketball")).thenReturn(evenements);
+		when(offreRepository.findAll()).thenReturn(offres);
 		mockMvc.perform(get("/billetterie/pagesport").param("sport", "basketball").with(authentication(authentication)))
-				.andExpect(model().attribute("evenements", evenements))
-				.andExpect(view().name("/billetterie/pagesport"));
+				.andExpect(model().attribute("evenements", evenements)).andExpect(model().attribute("offres", offres))
+				.andExpect(view().name("billetterie/pagesport"));
 
 	}
 
@@ -97,7 +125,7 @@ public class BilletterieTests {
 		when(reservationService.getPanier(user)).thenReturn(resultatGetPanier);
 		mockMvc.perform(get("/billetterie/panier").with(authentication(authentication)))
 				.andExpect(model().attribute("panier", List.of(resa1, resa2)))
-				.andExpect(model().attribute("suppression", false)).andExpect(view().name("/billetterie/panier"));
+				.andExpect(model().attribute("suppression", false)).andExpect(view().name("billetterie/panier"));
 	}
 
 	@Test
@@ -115,12 +143,12 @@ public class BilletterieTests {
 		when(reservationService.getPanier(user)).thenReturn(resultatGetPanier);
 		mockMvc.perform(get("/billetterie/commande").with(authentication(authentication)))
 				.andExpect(model().attribute("panier", List.of(resa1, resa2)))
-				.andExpect(model().attribute("suppression", false)).andExpect(view().name("/billetterie/commande"));
+				.andExpect(model().attribute("suppression", false)).andExpect(view().name("billetterie/commande"));
 	}
 
 	@Test
 	public void testAfficherSuccesCommande() throws Exception {
 		mockMvc.perform(get("/billetterie/paiementsuccess").with(authentication(authentication)))
-				.andExpect(view().name("/billetterie/paiementsuccess"));
+				.andExpect(view().name("billetterie/paiementsuccess"));
 	}
 }

@@ -51,9 +51,23 @@ setInterval(()=>{
         dateValidite = Date.parse(validite);
         if (dateValidite<Date.now()){
             console.log("Elément supprimé");
-            suppressionPanier(element.getAttribute("data-reservation"),element);           
+            suppressionPanier(element.getAttribute("data-reservation"),element);
+            document.getElementById("suppression-reservation").classList.remove("d-none");           
         }})
     },60000)
+
+
+//     // Vérification toutes les 60s que les éléments du panier sont toujours valables, si non suppression de l'élément
+// setInterval(()=>{
+//     document.querySelectorAll(".element-panier").forEach(
+//     (element)=>{
+//         validite = new Date(element.getAttribute("data-validite"));
+//         dateValidite = Date.parse(validite);
+//         if (dateValidite<Date.now()){
+//             console.log("Elément supprimé");
+//             suppressionPanier(element.getAttribute("data-reservation"),element);           
+//         }})
+//     },60000)
 
 
 

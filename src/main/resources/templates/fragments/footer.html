@@ -1,10 +1,10 @@
-<footer th:fragments="footer" class="bg-light text-secondary">
+<footer th:fragment="footer" class="bg-light text-secondary">
     <div class="row w-100 p-3">
-        <div class="d-flex flex-column justify-content-center col">
+        <div class="d-flex flex-column justify-content-center col-11 col-md-4">
             <p>Site web développé dans le cadre du bachelor concepteur développeur d'application Java HETIC</p>
             <small>&copy; Copyright Pierre Grison Laporte pour Studi</small>
         </div>
-        <div class="d-flex flex-column col">
+        <div class="d-flex flex-column col-11 col-md-4">
             <p><strong>NAVIGATION</strong></p>
             <a th:href="@{/accueil}" class="text-decoration-none text-secondary">Accueil</a>
             <a th:href="@{/billetterie}" class="text-decoration-none text-secondary">Billetterie</a>
@@ -12,7 +12,7 @@
             <a th:href="@{/login}" class="text-decoration-none text-secondary">Connexion</a>
             <a th:href="@{/register}" class="text-decoration-none text-secondary">Créer un compte</a>
         </div>
-        <div class="d-flex flex-column col">
+        <div class="d-flex flex-column col-11 col-md-4">
             <p><strong>MENTIONS LEGALES</strong></p>
             <a href="#" class="text-decoration-none text-secondary">CGU</a>
             <a href="#" class="text-decoration-none text-secondary">CGV</a>

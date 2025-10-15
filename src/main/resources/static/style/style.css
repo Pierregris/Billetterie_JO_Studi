@@ -13,13 +13,6 @@ body{
     margin:0;
 }
 
-
-
-.login-register{
-    background-image: url("../img/background.webp");
-    
-}
-
 .bandeau-top{
    /* background-image: url("../img/fond-billeterie.jpg");
     background-size: cover;*/
@@ -200,4 +193,20 @@ transition:3s;}
 .corbeille:hover{
     transform: scale(1.1);
     overflow: hidden;
+}
+
+@media (max-width: 768px){
+    #carouselAccueil{
+        display: none;
+    }
+
+    .texte-fin-accueil{
+        width: 100% !important;
+    }
+
+    .formulaire{
+        width : 90% !important;
+    }
+
+
 }
