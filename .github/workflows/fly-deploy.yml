@@ -12,14 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Installer Fly CLI
+      # Déployer avec Fly action officielle
       - uses: superfly/flyctl-actions/deploy@v1
         with:
           token: ${{ secrets.FLY_API_TOKEN }}
           remote-only: true
-
-      # Déployer directement avec le token
-      - name: Deploy app
-        run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
