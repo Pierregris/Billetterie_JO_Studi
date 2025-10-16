@@ -456,12 +456,10 @@ Création d'une nouvelle entité pour :
 #### Tableau de bord enrichi
 - Filtres par sport, date, taux de remplissage
 - Graphiques et statistiques avancées
-- Export des données de vente
 
 ### Application mobile
 Développement d'une app native pour :
 - Consultation optimisée des billets sur smartphone
-- Affichage rapide des QR codes
 - Notifications push (rappels d'événements, offres spéciales)
 - Expérience utilisateur mobile-first
 
@@ -474,10 +472,6 @@ Développement d'une app native pour :
 ### Fonctionnalités supplémentaires
 - **Liste d'attente fonctionnelle** : notification automatique en cas de désistement
 - **Transfert de billets** : entre utilisateurs avec traçabilité
-- **Programme personnalisé** : suggestions basées sur les préférences
 - **Intégration calendrier** : ajout automatique des événements réservés
 
 ---
-
-*Documentation générée pour le projet Bachelor Développeur d'Application Java - STUDI*  
-*Dernière mise à jour : Octobre 2025*
