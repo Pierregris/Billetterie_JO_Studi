@@ -1,17 +1,17 @@
 # Documentation Technique - Billetterie JO 2024
 
 ## Sommaire
-1. [Présentation du projet](#présentation)
-2. [Architecture technique](#architecture)
-3. [Modèle de données](#modèle)
-4. [Fonctionnalités](#fonctionnalités)
-5. [Tests et qualité](#tests)
-6. [Déploiement](#déploiement)
-7. [Évolutions futures](#évolutions)
+1. [Présentation du projet](#1-présentation-du-projet)
+2. [Architecture technique](#2-architecture-technique)
+3. [Modèle de données](#3-modèle-de-données)
+4. [Fonctionnalités](#4-fonctionnalités)
+5. [Tests et qualité](#5-tests-et-qualité)
+6. [Déploiement](#6-déploiement)
+7. [Évolutions futures](#7-évolutions-futures)
 
 ---
 
-## 1. Présentation du projet {#présentation}
+## 1. Présentation du projet
 
 ### Contexte
 Application web de réservation et distribution de billets pour les Jeux Olympiques 2024, développée dans le cadre du projet Bachelor Développeur d'Application Java (STUDI).
@@ -32,7 +32,7 @@ Cette documentation s'adresse aux développeurs, testeurs et parties prenantes t
 
 ---
 
-## 2. Architecture technique {#architecture}
+## 2. Architecture technique
 
 ### Stack technologique
 
@@ -58,7 +58,7 @@ Cette documentation s'adresse aux développeurs, testeurs et parties prenantes t
 
 ---
 
-## 3. Modèle de données {#modèle}
+## 3. Modèle de données
 
 ### Schéma conceptuel
 Le modèle repose sur 4 entités principales interconnectées.
@@ -122,7 +122,7 @@ Le modèle repose sur 4 entités principales interconnectées.
 
 ---
 
-## 4. Fonctionnalités {#fonctionnalités}
+## 4. Fonctionnalités
 
 ### 4.1 Gestion des comptes
 
