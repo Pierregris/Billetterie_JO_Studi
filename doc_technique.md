@@ -374,7 +374,7 @@ Tests unitaires sur :
 | DTO | 10 / 2 | 66% | N/A | N/A | 1 / 30 | 3% |
 | Status | 4 / 857 | **87%** | N/A | N/A | 0 / 14 | 0% |
 
-**Note** : Les classes de configuration (externes à Spring Boot) ne sont pas explicitement testées.
+**Note** : Les classes de configuration (développées en externe) ne sont pas explicitement testées.
 
 ---
 
