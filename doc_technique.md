@@ -63,6 +63,8 @@ Cette documentation s'adresse aux développeurs, testeurs et parties prenantes t
 ### Schéma conceptuel
 Le modèle repose sur 4 entités principales interconnectées.
 
+![MCD](MCD_Studi.png "Modèle conceptuel de données")
+
 ### Entités
 
 #### Utilisateur
