@@ -236,6 +236,6 @@ INSERT INTO evenement(sport,nom_evenement,date_evenement,heure_evenement,lieu,ca
 
 
 
-INSERT INTO offre(nom_offre,nb_places,discount) VALUES ("SOLO",1,1);
-INSERT INTO offre(nom_offre,nb_places,discount) VALUES ("DUO",2,0.95);
-INSERT INTO offre(nom_offre,nb_places,discount) VALUES ("FAMILIALE",4,0.9);
+INSERT INTO offre(nom_offre,nb_places,discount,active) VALUES ("SOLO",1,1,true);
+INSERT INTO offre(nom_offre,nb_places,discount,active) VALUES ("DUO",2,0.95,true);
+INSERT INTO offre(nom_offre,nb_places,discount,active) VALUES ("FAMILIALE",4,0.9,true);

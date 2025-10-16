@@ -43,7 +43,7 @@ public class BilletterieController {
 	public String affPageSport(Model model, @RequestParam(name = "sport", required = true) String sport) {
 		System.out.println(sport);
 		List<Evenement> evenements = evenementService.getEvenementsBySport(sport);
-		List<Offre> offres = offreRepository.findAll();
+		List<Offre> offres = offreRepository.findByActive(true);
 		offres.sort(Comparator.comparingInt(Offre::getNbPlaces));
 		model.addAttribute("evenements", evenements);
 		model.addAttribute("offres", offres);

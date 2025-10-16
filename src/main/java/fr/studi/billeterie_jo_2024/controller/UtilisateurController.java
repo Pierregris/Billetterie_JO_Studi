@@ -117,12 +117,13 @@ public class UtilisateurController {
 	public String verifierOTP(@RequestParam String otp, RedirectAttributes redirectAttribute,
 			HttpServletRequest request, HttpServletResponse response) {
 		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Optional<Utilisateur> utilisateurOTP = utilisateurRepository.findByOtp(otp);
-		if (utilisateurOTP.isEmpty()) {
+
+		if (!otp.equals(utilisateur.getOtp())) {
 			redirectAttribute.addFlashAttribute("erreurOTP", "Le code saisi est incorrect, veuillez réessayer");
 			return ("redirect:/2fa");
 		}
-		if (utilisateurOTP.get().getOtpValidity().isBefore(LocalDateTime.now())) {
+		
+		if (utilisateur.getOtpValidity().isBefore(LocalDateTime.now())) {
 			redirectAttribute.addFlashAttribute("erreurOTPexpire", "OTP expiré");
 			return ("redirect:/2fa");
 		}

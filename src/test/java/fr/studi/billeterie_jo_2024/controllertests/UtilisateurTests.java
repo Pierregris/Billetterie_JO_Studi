@@ -39,8 +39,10 @@ import fr.studi.billeterie_jo_2024.configuration.SpringSecurityConfig;
 import fr.studi.billeterie_jo_2024.configuration.TwoFactorAuthenticationSuccessHandler;
 import fr.studi.billeterie_jo_2024.controller.UtilisateurController;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
+import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.repository.UtilisateurRepository;
 import fr.studi.billeterie_jo_2024.service.EmailService;
+import fr.studi.billeterie_jo_2024.service.OffreService;
 import fr.studi.billeterie_jo_2024.service.ReservationService;
 import fr.studi.billeterie_jo_2024.service.UtilisateurService;
 import fr.studi.billeterie_jo_2024.status.Role;
@@ -72,6 +74,12 @@ public class UtilisateurTests {
 
 	@MockitoBean
 	UtilisateurRepository utilisateurRepository;
+
+	@MockitoBean
+	OffreService offreService;
+
+	@MockitoBean
+	OffreRepository offreRepository;
 
 	@Test
 	public void testGetRegister() throws Exception {
@@ -142,7 +150,7 @@ public class UtilisateurTests {
 				utilisateur.getAuthorities());
 		utilisateur.setOtpValidity(LocalDateTime.now().plusMinutes(5));
 		String otp = "otpTest";
-		when(utilisateurRepository.findByOtp(otp)).thenReturn(Optional.of(utilisateur));
+		utilisateur.setOtp(otp);
 		mockMvc.perform(post("/2fa").param("otp", otp).with(authentication(authentification)).with(csrf()))
 				.andExpect(redirectedUrl("/accueil"));
 	}
@@ -169,7 +177,7 @@ public class UtilisateurTests {
 				utilisateur.getAuthorities());
 		utilisateur.setOtpValidity(LocalDateTime.now().minusMinutes(5));
 		String otp = "otpTest";
-		when(utilisateurRepository.findByOtp(otp)).thenReturn(Optional.of(utilisateur));
+		utilisateur.setOtp(otp);
 		mockMvc.perform(post("/2fa").param("otp", otp).with(authentication(authentification)).with(csrf()))
 				.andExpect(flash().attribute("erreurOTPexpire", "OTP expiré")).andExpect(redirectedUrl("/2fa"));
 	}

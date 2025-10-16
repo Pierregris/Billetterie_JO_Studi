@@ -8,6 +8,8 @@
     <main>
         <div class="alert alert-success text-center m-2" th:if="${succesAjoutOffre}" th:text="${succesAjoutOffre}">
         </div>
+        <div class="alert alert-danger text-center m-2" th:if="${offreExistante}" th:text="${offreExistante}">
+        </div>
         <div class="formulaire mb-3">
             <div class="text-center">
                 <h3>Créer une nouvelle offre</h3>

@@ -92,18 +92,21 @@ public class BilletterieTests {
 		solo.setDiscount(1.0);
 		solo.setNbPlaces(1);
 		solo.setNomOffre("solo");
+		solo.setActive(true);
 		Offre duo = new Offre();
 		duo.setDiscount(0.95);
 		duo.setNbPlaces(2);
 		duo.setNomOffre("duo");
+		duo.setActive(true);
 		Offre familiale = new Offre();
 		familiale.setDiscount(0.9);
 		familiale.setNbPlaces(4);
 		familiale.setNomOffre("familiale");
+		familiale.setActive(true);
 		List<Offre> offres = new ArrayList<Offre>(List.of(solo, duo, familiale));
 		List<Evenement> evenements = List.of(ev1, ev2);
 		when(evenementService.getEvenementsBySport("basketball")).thenReturn(evenements);
-		when(offreRepository.findAll()).thenReturn(offres);
+		when(offreRepository.findByActive(true)).thenReturn(offres);
 		mockMvc.perform(get("/billetterie/pagesport").param("sport", "basketball").with(authentication(authentication)))
 				.andExpect(model().attribute("evenements", evenements)).andExpect(model().attribute("offres", offres))
 				.andExpect(view().name("billetterie/pagesport"));
@@ -117,10 +120,16 @@ public class BilletterieTests {
 		ev1.setBilletsVendus(0);
 		ev1.setCapaciteMax(1000);
 		ev1.setPrixBillet(50);
+		Offre offre = new Offre();
+		offre.setNomOffre("DUO");
+		offre.setNbPlaces(2);
+		offre.setDiscount(0.950);
 		Reservation resa1 = new Reservation();
 		resa1.setEvenement(ev1);
+		resa1.setOffreChoisie(offre);
 		Reservation resa2 = new Reservation();
 		resa2.setEvenement(ev1);
+		resa2.setOffreChoisie(offre);
 		ResultatGetPanier resultatGetPanier = new ResultatGetPanier(List.of(resa1, resa2), false);
 		when(reservationService.getPanier(user)).thenReturn(resultatGetPanier);
 		mockMvc.perform(get("/billetterie/panier").with(authentication(authentication)))

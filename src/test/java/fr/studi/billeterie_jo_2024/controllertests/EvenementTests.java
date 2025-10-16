@@ -26,6 +26,7 @@ import fr.studi.billeterie_jo_2024.controller.EvenementController;
 import fr.studi.billeterie_jo_2024.pojo.Utilisateur;
 import fr.studi.billeterie_jo_2024.repository.OffreRepository;
 import fr.studi.billeterie_jo_2024.service.EvenementService;
+import fr.studi.billeterie_jo_2024.service.OffreService;
 import fr.studi.billeterie_jo_2024.status.Role;
 
 @Import(SpringSecurityConfig.class)
@@ -46,6 +47,9 @@ public class EvenementTests {
 
 	@MockitoBean
 	OffreRepository offreRepository;
+
+	@MockitoBean
+	OffreService offreService;
 
 	@Test
 	public void testGetCreerEvenementWithAdminProfile() throws Exception {

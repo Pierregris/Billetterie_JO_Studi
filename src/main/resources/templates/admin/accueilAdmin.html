@@ -17,7 +17,6 @@
                         la
                         date et le lieu, ainsi que la capacité d'accueil maximale
                     </p>
-                    <img th:src="@{/img/img_athletisme.jpg}" alt="" class="img-fluid m-0">
                     <a class="btn btn-primary m-1" th:href="@{/admin/creerEvenement}">JE CREE UN EVENEMENT </a>
                 </div>
             </div>
@@ -36,10 +35,19 @@
             <div class="card col-11 col-md-4 m-1">
                 <div class="card-body text-center">
 
+                    <h3 class="card-title">Gérer les offres</h3>
+                    <p class="card-text">Activer ou désactiver les offres en fonction des besoins
+                    </p>
+                    <a class="btn btn-primary m-1" th:href="@{/admin/gereroffres}">JE GERE LES OFFRE </a>
+                </div>
+            </div>
+
+            <div class="card col-11 col-md-4 m-1">
+                <div class="card-body text-center">
+
                     <h3 class="card-title">Consulter les données des événements en vente</h3>
                     <p class="card-text">Consultez les ventes en cours pour vos événements
                     </p>
-                    <img th:src="@{/img/img_athletisme.jpg}" alt="" class="img-fluid m-0">
                     <a class="btn btn-primary m-1" th:href="@{/admin/consulterEvenement}">JE CONSULTE LES DONNEES </a>
                 </div>
             </div>

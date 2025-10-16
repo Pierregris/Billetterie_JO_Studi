@@ -32,7 +32,6 @@ public class SpringSecurityConfig {
 				.permitAll().requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/2fa").hasRole("PRE_AUTH")
 				.anyRequest().hasAnyRole("ADMIN", "USER"))
 				.formLogin(formLogin -> formLogin.loginPage("/login").usernameParameter("mail")
-
 						.authenticationDetailsSource(authenticationDetailsSourceConfig)
 						.successHandler(twoFASuccessHandler))
 				.logout(logout -> logout.logoutSuccessUrl("/accueil").invalidateHttpSession(true)

@@ -12,6 +12,16 @@ public class Offre {
 
 	Double discount;
 
+	Boolean active = true;
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	public Double getDiscount() {
 		return discount;
 	}

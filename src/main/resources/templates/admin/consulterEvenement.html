@@ -15,7 +15,7 @@
                     <p class="card-text"
                         th:text="|le ${#temporals.format(evenement.dateEvenement, 'dd/MM/yyyy')}, à ${evenement.heureEvenement} à ${evenement.lieu}">
                     </p>
-                    <img th:src="@{/img/img_athletisme.jpg}" alt="" class="img-fluid m-0">
+
                     <div class="container">
                         Billets vendus : <span th:text="|${evenement.billetsVendus} /${evenement.capaciteMax}|"></span>
                         <div class="progress rounded-pill m-1" role="progressbar"

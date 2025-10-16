@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="fragments/head :: scriptImport (pageTitle='[Administrateur] - Consulter les données')"></head>
+
+
+<body>
+    <div th:replace="fragments/header::header"></div>
+    <main>
+        <section class="row m-auto col-11 justify-content-center align-items-center">
+
+            <table class="table bg-light m-3 text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Nom de l'offre</th>
+                        <th scope="col">Nombre de places</th>
+                        <th scope="col">Réduction</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="offre:${offres}">
+                        <th scope="row" th:text="${offre.nomOffre}"></th>
+                        <td th:text="${offre.nbPlaces}"></td>
+                        <td th:text="${#numbers.formatDecimal(100*(1-offre.discount),0,0)+'%'}"></td>
+                        <td th:text="${offre.active ? 'Active':'Inactive'}"></td>
+                        <td><a class="btn-desactiver-offre btn btn-warning rounded-pill" th:if="${offre.active}"
+                                th:attr="data-offre=${offre.nomOffre}" href="">Désactiver l'offre</a>
+                            <a class="btn-activer-offre btn btn-success rounded-pill" th:if="${!offre.active}"
+                                th:attr="data-offre=${offre.nomOffre}" href="">Activer l'offre</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <div th:replace="fragments/footer::footer"></div>
+</body>
+
+</html>
