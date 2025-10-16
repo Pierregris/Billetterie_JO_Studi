@@ -352,7 +352,7 @@ public String genererQRCode(UUID cleAchat, UUID utilisateur_id, int width, int h
 
 ---
 
-## 5. Tests et qualité {#tests}
+## 5. Tests et qualité
 
 ### Stratégie de test
 
@@ -378,7 +378,7 @@ Tests unitaires sur :
 
 ---
 
-## 6. Déploiement {#déploiement}
+## 6. Déploiement
 
 ### Plateforme
 Déploiement via **Fly.io**. Référez-vous à la documentation officielle pour la procédure détaillée.
@@ -438,7 +438,7 @@ ENTRYPOINT ["java", "-Duser.timezone=Europe/Paris", "-jar", "app.jar"]
 
 ---
 
-## 7. Évolutions futures {#évolutions}
+## 7. Évolutions futures
 
 ### API de paiement réelle
 Intégration de solutions comme **Stripe** ou **PayPal** pour remplacer la simulation actuelle et permettre de vraies transactions.
