@@ -70,31 +70,34 @@ Le modèle repose sur 4 entités principales interconnectées.
 #### Utilisateur
 | Attribut | Type | Description |
 |----------|------|-------------|
-| id | UUID | Clé unique générée à la création (utilisée pour le QR code) |
-| nom | String | Nom de famille |
-| prenom | String | Prénom |
-| email | String | Identifiant de connexion (unique) |
-| telephone | String | Numéro de téléphone |
-| adresse | String | Adresse postale complète |
-| motDePasse | String | Mot de passe crypté (BCrypt) |
-| role | Enum | ADMIN, USER ou PRE_AUTH |
-| active | Boolean | Compte activé via email |
-| otp | String | Code de validation 2FA |
-| otpValidity | LocalDateTime | Date d'expiration de l'OTP |
+| `cleUtilisateur` | UUID | Clé unique générée à la création (utilisée pour le QR code) |
+| `nom` | String | Nom de famille |
+| `prenom` | String | Prénom |
+| `email` | String | Identifiant de connexion (unique) |
+| `telephone` | String | Numéro de téléphone |
+| `adresse` | String | Adresse postale |
+| `codePostal` | String | Code postal |
+| `ville` | String | Ville |
+| `motDePasse` | String | Mot de passe crypté (BCrypt) |
+| `role` | Enum | ADMIN, USER ou PRE_AUTH |
+| `active` | Boolean | Compte activé via email |
+| `otp` | String | Code de validation 2FA |
+| `otpValidity` | LocalDateTime | Date d'expiration de l'OTP |
+| `activationToken` | UUID | Token d'activation du compte |
 
 **Politique de sécurité du mot de passe** : minimum 10 caractères, dont au moins 1 majuscule, 1 chiffre et 1 caractère spécial.
 
 #### Réservation
 | Attribut | Type | Description |
 |----------|------|-------------|
-| id | Long | Identifiant auto-incrémenté |
-| status | Enum | PANIER, EXPIREE ou FINALISEE |
-| validite | LocalDateTime | Date limite de validité (1h après ajout au panier) |
-| montant | Float | Montant total en € |
-| offre | Offre | Offre sélectionnée |
-| cleAchat | UUID | Clé unique générée à l'achat |
-| utilisateur | Utilisateur | Propriétaire de la réservation |
-| evenement | Evenement | Événement réservé |
+| `id` | Long | Identifiant auto-incrémenté |
+| `status` | Enum | PANIER, EXPIREE ou FINALISEE |
+| `validite` | LocalDateTime | Date limite de validité (1h après ajout au panier) |
+| `montant` | Float | Montant total en € |
+| `offreChoisie` | Offre | Offre sélectionnée |
+| `cleAchat` | UUID | Clé unique générée à l'achat |
+| `utilisateur` | Utilisateur | Propriétaire de la réservation |
+| `evenement` | Evenement | Événement réservé |
 
 **Cycle de vie** :
 - **PANIER** : réservation non payée (visible dans le panier)
@@ -104,23 +107,23 @@ Le modèle repose sur 4 entités principales interconnectées.
 #### Événement
 | Attribut | Type | Description |
 |----------|------|-------------|
-| id | Long | Identifiant auto-incrémenté |
-| sport | String | Discipline sportive |
-| nomEvenement | String | Nom descriptif (ex: "France-USA", "Finale H") |
-| date | LocalDate | Date de l'événement |
-| heure | LocalTime | Heure de début |
-| lieu | String | Lieu de l'événement |
-| capaciteMax | Integer | Capacité maximale d'affluence |
-| billetsVendus | Integer | Nombre de billets vendus |
-| prixBillet | Float | Prix unitaire du billet |
+| `id` | Long | Identifiant auto-incrémenté |
+| `sport` | String | Discipline sportive |
+| `nomEvenement` | String | Nom descriptif (ex: "France-USA", "Finale H") |
+| `date` | LocalDate | Date de l'événement |
+| `heure` | LocalTime | Heure de début |
+| `lieu` | String | Lieu de l'événement |
+| `capaciteMax` | Integer | Capacité maximale d'affluence |
+| `billetsVendus` | Integer | Nombre de billets vendus |
+| `prixBillet` | Float | Prix unitaire du billet |
 
 #### Offre
 | Attribut | Type | Description |
 |----------|------|-------------|
-| nomOffre | String | Nom de l'offre (ex: "Duo", "Familiale") |
-| reduction | Float | Coefficient de réduction (ex: 0.95 = -5%) |
-| nbPlaces | Integer | Nombre de places incluses |
-| active | Boolean | Offre visible et réservable |
+| `nomOffre` | String | Nom de l'offre (ex: "Duo", "Familiale") |
+| `reduction` | Float | Coefficient de réduction (ex: 0.95 = -5%) |
+| `nbPlaces` | Integer | Nombre de places incluses |
+| `active` | Boolean | Offre visible et réservable |
 
 ---
 

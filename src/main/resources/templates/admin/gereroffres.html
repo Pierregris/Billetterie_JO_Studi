@@ -24,7 +24,7 @@
                         <th scope="row" th:text="${offre.nomOffre}"></th>
                         <td th:text="${offre.nbPlaces}"></td>
                         <td th:text="${#numbers.formatDecimal(100*(1-offre.discount),0,0)+'%'}"></td>
-                        <td th:text="${offre.active ? 'Active':'Inactive'}"></td>
+                        <td th:id="${offre.nomOffre}" th:text="${offre.active ? 'Active':'Inactive'}"></td>
                         <td><a class="btn-desactiver-offre btn btn-warning rounded-pill" th:if="${offre.active}"
                                 th:attr="data-offre=${offre.nomOffre}" href="">Désactiver l'offre</a>
                             <a class="btn-activer-offre btn btn-success rounded-pill" th:if="${!offre.active}"

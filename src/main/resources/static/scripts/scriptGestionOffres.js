@@ -12,6 +12,7 @@ table.addEventListener("click",event=>{
                 btn.classList.add("btn-success");
                 btn.classList.add("btn-activer-offre");
                 btn.textContent ="Activer l'offre";});
+                document.getElementById(nom_offre).textContent="Inactive"
             
     }   
 
@@ -24,6 +25,7 @@ table.addEventListener("click",event=>{
                 btn.classList.add("btn-warning");
                 btn.classList.add("btn-desactiver-offre");
                 btn.textContent ="Désactiver l'offre";});
+                document.getElementById(nom_offre).textContent="Active"
             }
         })
 
