@@ -32,6 +32,8 @@ public class OffreController {
 
 	@GetMapping("/creerOffre")
 	public String affPageOffre(Model model) {
+		// On ajoute une offre vide au modèle pour la compléter suite à la saisie du
+		// formulaire
 		model.addAttribute("offre", new Offre());
 		return "admin/creerOffre";
 	}
@@ -39,11 +41,13 @@ public class OffreController {
 	@PostMapping("/creerOffre")
 	public String ajouterOffre(@ModelAttribute Offre offre, RedirectAttributes redirectAttributes) {
 		offre.setDiscount((100 - offre.getDiscount()) / 100);
+		// Deux offres ne peuvent pas avoir le même nom (c'est l'id de la table)
 		if (!offreRepository.findById(offre.getNomOffre()).isEmpty()) {
 			redirectAttributes.addFlashAttribute("offreExistante",
 					"Une offre existe déjà avec ce nom, veuillez en choisir un autre");
 			return "redirect:/admin/creerOffre";
 		}
+		// Si le nom de l'offre est unique on crée l'offre et on informe l'utilisateur
 		offreRepository.save(offre);
 		redirectAttributes.addFlashAttribute("succesAjoutOffre",
 				"L'offre a bien été ajoutée, elle sera affichée dans la billetterie");
@@ -52,6 +56,8 @@ public class OffreController {
 
 	@GetMapping("/gereroffres")
 	public String gererOffre(Model model) {
+		// On récupère toutes les offres créées, on les trie par ordre de nombre de
+		// places, pour l'affichage cohérent, puis on les ajoute au modèle
 		List<Offre> offres = offreRepository.findAll();
 		offres.sort(Comparator.comparingInt(Offre::getNbPlaces));
 		model.addAttribute("offres", offres);
@@ -60,7 +66,7 @@ public class OffreController {
 
 	@PostMapping("/desactiveroffre")
 	public String desactiverOffre(RedirectAttributes redirectAttributes, @RequestParam String nom_offre) {
-		System.out.println("Entrée endpoint");
+		// On désactive l'offre dont le nom est passé en paramètre
 		offreService.desactiverOffre(nom_offre);
 		redirectAttributes.addFlashAttribute("offreDesactivee", "L'offre a bien été désactivée");
 		return "redirect:/admin/gereroffres";
@@ -68,6 +74,7 @@ public class OffreController {
 
 	@PostMapping("/activeroffre")
 	public String activerOffre(RedirectAttributes redirectAttributes, @RequestParam String nom_offre) {
+		// On active l'offre dont le nom est passé en paramètre
 		offreService.activerOffre(nom_offre);
 		redirectAttributes.addFlashAttribute("offreActivee", "L'offre a bien été activée");
 		return "redirect:/admin/gereroffres";

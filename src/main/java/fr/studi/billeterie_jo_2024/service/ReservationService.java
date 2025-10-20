@@ -16,8 +16,6 @@ public interface ReservationService {
 
 	ResultatGetPanier getPanier(Utilisateur utilisateur);
 
-	void validerPanier(List<Reservation> panier);
-
 	void supprimerDuPanier(Long reservation_id);
 
 	void validerReservation(Long reservation_id);

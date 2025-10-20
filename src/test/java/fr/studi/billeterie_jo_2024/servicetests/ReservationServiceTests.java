@@ -215,15 +215,4 @@ public class ReservationServiceTests {
 
 		assertThat(result).hasSize(1).containsExactly(reservation);
 	}
-
-	@Test
-	void testValiderPanier() {
-		List<Reservation> panier = new ArrayList<>();
-		panier.add(reservation);
-
-		reservationService.validerPanier(panier);
-
-		assertThat(reservation.getStatusReservation()).isEqualTo(StatusReservation.FINALISEE);
-
-	}
 }

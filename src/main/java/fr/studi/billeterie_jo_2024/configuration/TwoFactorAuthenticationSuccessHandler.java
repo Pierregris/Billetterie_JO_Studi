@@ -34,8 +34,9 @@ public class TwoFactorAuthenticationSuccessHandler implements AuthenticationSucc
 	@Autowired
 	EmailService emailService;
 
+	// Génération de l'OTP, 6 caractères parmi lettre et /ou chiffres
 	public String generateOtp() {
-		String chararacters = "ABCDEFGHIJKLMNOP0123456789";
+		String chararacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		Random random = new Random();
 		StringBuilder otp = new StringBuilder();
 		for (int i = 0; i < 6; i++) {
@@ -48,6 +49,8 @@ public class TwoFactorAuthenticationSuccessHandler implements AuthenticationSucc
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 
+		// On récupère l'utilisateur "préconnecté", et on lui attribue le rôle
+		// "PRE_AUTH" qui donne accès à la page "2fa"
 		Utilisateur utilisateur = (Utilisateur) authentication.getPrincipal();
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_PRE_AUTH"));
@@ -58,20 +61,21 @@ public class TwoFactorAuthenticationSuccessHandler implements AuthenticationSucc
 		Boolean isAdmin = utilisateur.getAuthorities().stream()
 				.anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
+		// Si l'utilisateur est admin, on ne redirige pas vers le 2fa
 		if (isAdmin) {
 			response.sendRedirect("/accueil");
 		} else {
 
 			SecurityContextHolder.getContext().setAuthentication(preAuth);
-
+			// On génère l'OTP et on l'assigne à l'utilisateur
 			String otp = generateOtp();
 			utilisateur.setOtp(otp);
 			utilisateur.setOtpValidity(LocalDateTime.now().plusMinutes(5));
 			utilisateurRepository.save(utilisateur);
-
+			// On envoie l'OTP par mail à l'utilisateur
 			emailService.sendEmail(utilisateur.getMail(), "Code de vérification",
 					"Voici votre code de vérification : " + otp);
-
+			// On redirige l'utilisateur vers la page 2fa
 			response.sendRedirect("/2fa");
 		}
 

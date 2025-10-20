@@ -15,8 +15,8 @@ public class OffreServiceImpl implements OffreService {
 
 	@Override
 	public void desactiverOffre(String nomOffre) {
-		System.out.println("Entrée fonction");
 		Offre offre = offreRepository.findById(nomOffre).orElse(null);
+		// On désactive l'offre passée en paramètre
 		offre.setActive(false);
 		offreRepository.save(offre);
 	}
@@ -24,6 +24,7 @@ public class OffreServiceImpl implements OffreService {
 	@Override
 	public void activerOffre(String nomOffre) {
 		Offre offre = offreRepository.findById(nomOffre).orElse(null);
+		// On active l'offre passée en paramètre
 		offre.setActive(true);
 		offreRepository.save(offre);
 	}

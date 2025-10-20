@@ -13,7 +13,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 
 @Configuration
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800)
-@Profile("!test & !local")
+@Profile("!test & !local") // Uniquement pour la config "prod"
 public class RedisConfig {
 
 	@Value("${spring.data.redis.host:localhost}")

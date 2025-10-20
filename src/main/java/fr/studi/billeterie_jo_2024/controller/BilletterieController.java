@@ -34,25 +34,29 @@ public class BilletterieController {
 
 	@GetMapping("")
 	public String affBilletterie(Model model) {
-		List<String> sports = evenementService.getDistinctSports();
-		model.addAttribute("sports", sports);
+		List<String> sports = evenementService.getDistinctSports();// On récupère tous les sports différents à afficher
+		model.addAttribute("sports", sports);// On ajoute la liste des sports au modèle pour transmission par Thymeleaf
 		return "billetterie/accueilbilletterie";
 	}
 
 	@GetMapping("/pagesport")
 	public String affPageSport(Model model, @RequestParam(name = "sport", required = true) String sport) {
-		System.out.println(sport);
-		List<Evenement> evenements = evenementService.getEvenementsBySport(sport);
+		List<Evenement> evenements = evenementService.getEvenementsBySport(sport); // On récupère tous les événements
+																					// liés au sport choisi
 		List<Offre> offres = offreRepository.findByActive(true);
-		offres.sort(Comparator.comparingInt(Offre::getNbPlaces));
+		offres.sort(Comparator.comparingInt(Offre::getNbPlaces));// On récupère toutes les offres actives et on les trie
+																	// par ordre de nombre de places croissant, pour un
+																	// affichage cohérent
 		model.addAttribute("evenements", evenements);
-		model.addAttribute("offres", offres);
+		model.addAttribute("offres", offres);// On ajoute les événements et les offres au modèle
 		return "billetterie/pagesport";
 	}
 
 	@GetMapping("/panier")
 	public String affPanier(Model model) {
 		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// On récupère l'ensemble des réservations du panier de l'utilisateur. La
+		// variable suppression permet de définir si une réservation était expirée
 		List<Reservation> panier = reservationService.getPanier(utilisateur).getReservations();
 		Boolean suppression = reservationService.getPanier(utilisateur).getSuppression();
 		model.addAttribute("panier", panier);
@@ -63,6 +67,8 @@ public class BilletterieController {
 	@GetMapping("/commande")
 	public String affCommande(Model model) {
 		Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		// On récupère l'ensemble des réservations du panier de l'utilisateur. La
+		// variable suppression permet de définir si une réservation était expirée
 		List<Reservation> panier = reservationService.getPanier(utilisateur).getReservations();
 		Boolean suppression = reservationService.getPanier(utilisateur).getSuppression();
 		model.addAttribute("panier", panier);

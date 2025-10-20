@@ -75,14 +75,18 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public ResultatGetPanier getPanier(Utilisateur utilisateur) {
+		// On récupère l'ensemble des réservations de l'utilisateur connecté avec le
+		// statut Panier
 		List<Reservation> reservations = reservationRepository.findByUtilisateurAndStatusReservation(utilisateur,
 				StatusReservation.PANIER);
 		Boolean suppression = false;
+		// On utilise un iterator pour supprimer les réservations expirées
 		Iterator<Reservation> iterator = reservations.iterator();
 		while (iterator.hasNext()) {
 			Reservation reservation = iterator.next();
 			if (reservation.getValidite().isBefore(LocalDateTime.now())) {
 				this.supprimerDuPanier(reservation.getId());
+				// Si une réservation est expirée on passe le paramètre suppression à true
 				suppression = true;
 				iterator.remove();
 			}
@@ -97,15 +101,14 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
-	public void validerPanier(List<Reservation> panier) {
-		panier.forEach(reservation -> reservation.setStatusReservation(StatusReservation.FINALISEE));
-	}
-
-	@Override
 	public void supprimerDuPanier(Long reservation_id) {
+		// On récupère la réservation passée en paramètre
 		Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
+		// On récupère l'événement associé
 		Evenement evenement = reservation.getEvenement();
+		// On remet en vente les billets supprimés
 		evenement.setBilletsVendus(evenement.getBilletsVendus() - reservation.getOffreChoisie().getNbPlaces());
+		// La réservation passe au statut Expirée
 		reservation.setStatusReservation(StatusReservation.EXPIREE);
 		reservationRepository.save(reservation);
 
@@ -113,6 +116,8 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public void validerReservation(Long reservation_id) {
+		// On valide la réservation passée en paramètre en la passant au statut
+		// Finalisée
 		Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
 		reservation.setStatusReservation(StatusReservation.FINALISEE);
 		reservationRepository.save(reservation);
@@ -121,6 +126,8 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public void genererCleAchat(Long reservation_id) {
+		// On génère un UUID Random pour la clé d'achat, que l'on assigne à la
+		// réservation passée en paramètre
 		Reservation reservation = reservationRepository.findById(reservation_id).orElse(null);
 		reservation.setCléAchat(UUID.randomUUID());
 		reservationRepository.save(reservation);
@@ -128,6 +135,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public String genererQRCode(UUID cleAchat, UUID utilisateur_id, int width, int height) {
+		// On génère un QR Code sur la base des informations passées en paramètres
 		try {
 			return qrCodeService.generateQRCodeBase64(width, height, cleAchat.toString() + utilisateur_id.toString());
 		} catch (WriterException | IOException e) {

@@ -33,19 +33,24 @@ public class EvenementController {
 
 	@GetMapping("/creerEvenement")
 	public String affPageAdmin(Model model) {
+		// On ajoute un événement vide au modèle pour le compléter avec les infos du
+		// formulaire
 		model.addAttribute("evenement", new Evenement());
 		return "admin/creerEvenement";
 	}
 
 	@PostMapping("/creerEvenement")
 	public String ajouterEvenement(@ModelAttribute Evenement evenement) {
+		// On supprime les éventuels espaces dans le nom du sport
 		evenement.setSport(evenement.getSport().replace(" ", "-"));
+		// On crée l'événement en base
 		evenementService.createEvenement(evenement);
 		return "redirect:/admin/creerEvenement";
 	}
 
 	@GetMapping("/consulterEvenement")
 	public String affPageConsultation(Model model) {
+		// On récupère l'ensemble des événements et on les ajoute au modèle
 		List<Evenement> evenements = evenementService.getAllEvenements();
 		model.addAttribute("evenements", evenements);
 		return "admin/consulterEvenement";
