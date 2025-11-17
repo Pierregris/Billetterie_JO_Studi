@@ -8,11 +8,26 @@ Application Spring Boot Web
 ## Environnement nécessaire:
 Java 17 ou supérieur 
 Maven 3.6 ou supérieur
-Base de données SQL (mariaDB, mySQL)  
-Compte messagerie pour envoi des mails  
+Une base de données opérationnelle (voir paragraphe ci-après) 
+Compte messagerie pour l'envoi des mails  
 
 ## Cloner le répository github suivant:
 https://github.com/Pierregris/Billetterie_JO_Studi.git
+
+## Créer une base de données opérationnelle
+1. Connectez vous sur le site https://admin.alwaysdata.com/
+    Si vous n'avez pas de compte, cliquez sur "S'inscrire"
+    Si vous avez un compte, renseignez vos identifiants
+
+2. Cliquez à gauche sur "Bases de données" puis "MySQL"
+3. Cliquez sur le bouton "Ajouter une base de données"
+4. Choisissez le nom de votre base de données
+5. Notez bien :
+    - le nom de la base de données
+    - le nom de l'utilisateur propriétaire des droits
+    - le mot de passe associé
+    - l'url de la base de données (par exemple : jdbc:mariadb://mysql-username.alwaysdata.net/dbname)
+    
 
 ## Renseignez les variables d'environnement suivantes sur votre machine
 ### Url de base
@@ -33,4 +48,8 @@ https://github.com/Pierregris/Billetterie_JO_Studi.git
 ## Lancement de l'application
 mvn spring-boot:run
 Le port utilisé par défaut est le 8081
+
+## Tests
+L'application intègre une série de tests que vous pouvez lancer avec la commande :
+mvn test
 
