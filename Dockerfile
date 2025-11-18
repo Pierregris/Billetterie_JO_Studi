@@ -7,6 +7,8 @@ COPY .mvn .mvn
 COPY mvnw .
 COPY src ./src
 
+RUN chmod +x mvnw
+
 RUN ./mvnw clean package
 
 FROM eclipse-temurin:21-jdk
