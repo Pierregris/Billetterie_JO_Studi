@@ -30,3 +30,8 @@ jobs:
   
    - name : Package
      run : mvn package -Dspring.profiles.active=prod
+
+name: Fly Deploy
+uses: superfly/flyctl-actions/deploy@v3
+with:
+  token: ${{ secrets.FLY_API_TOKEN }}
