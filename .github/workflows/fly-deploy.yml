@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-group
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       # Déployer avec Fly action officielle
-      - uses: superfly/flyctl-actions/deploy@v1
+      - uses: superfly/flyctl-actions/deploy@v3
         with:
           token: ${{ secrets.FLY_API_TOKEN }}
           remote-only: true

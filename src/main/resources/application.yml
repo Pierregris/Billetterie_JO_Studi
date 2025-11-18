@@ -133,6 +133,57 @@ server:
    
 app:
     base-url: ${APP_BASE_URL} 
+
+---
+
+#Profil pour le test (base H2)
+spring: 
+  config:
+    activate:
+      on-profile: test
+            
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+    
+    
+  thymeleaf:
+    cache: false
+  jackson:
+    time-zone: Europe/Paris
+            
+  jpa:
+   show-sql: true
+     
+   hibernate:
+    ddl-auto: create-drop
+        
+     
+logging:
+    level:
+      org.springframework.security: DEBUG
+
+server:
+   forward-headers-strategy: framework
+   address: 0.0.0.0 
+   port: ${PORT:8081}
+   servlet:
+    session:
+      cookie:
+        secure: true
+        same-site: lax 
+   compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,application/json,text/css,application/javascript 
+       
+app:
+    base-url: http://localhost:8081 
   
   
   

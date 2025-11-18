@@ -16,8 +16,8 @@ https://github.com/Pierregris/Billetterie_JO_Studi.git
 
 ## Créer une base de données opérationnelle
 1. Connectez vous sur le site https://admin.alwaysdata.com/
-    Si vous n'avez pas de compte, cliquez sur "S'inscrire"
-    Si vous avez un compte, renseignez vos identifiants
+    - Si vous n'avez pas de compte, cliquez sur "S'inscrire"
+    - Si vous avez un compte, renseignez vos identifiants
 
 2. Cliquez à gauche sur "Bases de données" puis "MySQL"
 3. Cliquez sur le bouton "Ajouter une base de données"

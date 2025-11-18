@@ -299,9 +299,7 @@ public String genererQRCode(UUID cleAchat, UUID utilisateur_id, int width, int h
 
 ### 4.3 Espace administrateur
 
-**Identifiants de test** :
-- Email : `admin@admin.fr`
-- Mot de passe : `admin`
+**Identifiants de test** : voir dans la copie STUDI
 
 #### Création d'événement
 
