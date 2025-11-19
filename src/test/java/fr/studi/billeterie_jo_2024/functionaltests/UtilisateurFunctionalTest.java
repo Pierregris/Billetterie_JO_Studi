@@ -45,6 +45,7 @@ public class UtilisateurFunctionalTest {
 
 	@BeforeEach
 	public void setUp() {
+		utilisateurRepository.deleteAll();
 		Utilisateur utilisateur = new Utilisateur("Duval", "Maurice", "Champs Elysées", "75016", "Paris",
 				"mauriceduval@mail.fr", "0610111213", passwordEncoder.encode("mdpMDuval123!"));
 		utilisateur.setActive(true);
@@ -69,6 +70,17 @@ public class UtilisateurFunctionalTest {
 		verify(emailService).sendEmail("jeandupond@mail.fr", "Inscription validée",
 				"Vous êtes bien inscrit ! Activez dès maintenant votre compte en cliquant sur ce bouton :"
 						+ lienActivation);
+	}
+
+	@Test
+	public void testExistingMail() throws Exception {
+		mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("nom", "Dupond")
+				.param("prenom", "Jean").param("adresse", "rue de la Paix").param("codePostal", "75001")
+				.param("ville", "Paris").param("mail", "mauriceduval@mail.fr").param("telephone", "0607080910")
+				.param("password", "Motdepasse123!").with(csrf())).andExpect(redirectedUrl("/register"))
+				.andExpect(flash().attribute("messageErreurDoublon",
+						"Un compte existe déjà avec cette adresse mail. Connectez-vous directement : "));
+
 	}
 
 }
